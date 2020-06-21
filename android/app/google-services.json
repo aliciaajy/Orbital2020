@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "551542345694",
+    "firebase_url": "https://establist-d80bb.firebaseio.com",
+    "project_id": "establist-d80bb",
+    "storage_bucket": "establist-d80bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551542345694:android:3ddc741cf057b148a1974f",
+        "android_client_info": {
+          "package_name": "com.estabList"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551542345694-36nvb2omgmkaoimkjcjqjh35amtrn8fi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.estabList",
+            "certificate_hash": "2d5245f89959d85ba19930bafbb55873c0146386"
+          }
+        },
+        {
+          "client_id": "551542345694-8h6trkdo7f1i38khh87grahajabkospf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy0OpkOZwP80qWDvQ8jBaSn_yy-YM3HcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551542345694-8h6trkdo7f1i38khh87grahajabkospf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "551542345694-f56p6po0bjvthe31hi3mv7q9le15ldeb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nus.estabList"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
