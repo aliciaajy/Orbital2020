@@ -108,7 +108,7 @@ class _EventPageState extends State<EventPage> {
                 ? Icons.fiber_manual_record
                 : Icons.radio_button_unchecked, 
                 size: iconSize, 
-                color: Theme.of(context).accentColor),
+                color: Colors.purple),
             ));
   }
 }
