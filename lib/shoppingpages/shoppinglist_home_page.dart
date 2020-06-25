@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:login/pages/type_of_list.dart';
+import 'package:login/widgets/custom_button.dart';
 
 class ShoppingListHomePage extends StatefulWidget {
   @override
@@ -9,6 +11,9 @@ class ShoppingListHomePage extends StatefulWidget {
 } 
 
 class ShoppingList extends State<ShoppingListHomePage> {
+  PageController _pageController = PageController();
+  double currentPage = 0;
+
   static List<ShopList> shoplist = List<ShopList>();
   String input = "";
   
@@ -19,14 +24,24 @@ class ShoppingList extends State<ShoppingListHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _pageController.addListener(() {
+      setState(() {
+        currentPage = _pageController.page;
+      });
+     });
     return Scaffold (
-      appBar: AppBar(
-        title: const Text('Shopping List', style:TextStyle(color:Colors.white )),
-        backgroundColor: Colors.purple
-      ),
+      
 
-      //backgroundColor: Colors.white,
-      //backgroundColor: Color(0xFFEFEF4),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: 35,
+            color: Colors.purple   //Theme.of(context).accentColor,
+          ),
+        _mainContent(context)
+        ]
+       ),
+         
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
           showDialog(
@@ -77,7 +92,43 @@ class ShoppingList extends State<ShoppingListHomePage> {
           ]
         )
       ),
-      body: ListView.builder(
+    
+    );
+  }
+
+  Widget _mainContent(BuildContext context) {
+    return  Column(
+      
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(height: 60),
+        IconButton(icon:Icon(Icons.arrow_back, size: 30), onPressed:() {
+        Navigator.push(context,MaterialPageRoute(builder: (context) => Option()),
+        );
+        },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Text(
+          "Shopping List", 
+          style: TextStyle(
+          fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: _button(context),
+        ),
+        Expanded(
+          child: PageView(
+            controller: _pageController,
+            children: <Widget>[bodycontent(context)],
+          ))
+        ],
+      );
+  }
+  Widget bodycontent(BuildContext context) {
+    return ListView.builder(
       itemCount: shoplist.length,
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
@@ -87,7 +138,8 @@ class ShoppingList extends State<ShoppingListHomePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
           child: ListTile(
-            leading: Checkbox(
+            leading: 
+            Checkbox(
               activeColor: Colors.purple,
               checkColor: Colors.white,
               value: shoplist[index].done,
@@ -97,9 +149,8 @@ class ShoppingList extends State<ShoppingListHomePage> {
             });
             
           }),
-
-            title: Text(shoplist[index].item,
-            style: TextStyle(
+          title: Text(shoplist[index].item,
+          style: TextStyle(
               decoration: (shoplist[index].done
               ? TextDecoration.lineThrough
               : TextDecoration.none)
@@ -116,13 +167,38 @@ class ShoppingList extends State<ShoppingListHomePage> {
                 });
               },
             ),
+            
             ),
           ));
         }
-      )
+    );     
+  }
+
+  Widget _button(BuildContext context) {
+    return Row(
+          children: <Widget>[
+            Expanded(
+              child: CustomButton(
+                onPressed: () {
+                  _pageController.previousPage(
+                    duration: Duration(milliseconds: 500), 
+                    curve: Curves.bounceInOut);
+                }, 
+                buttonText: "Items",
+                color: 
+                currentPage > 0.5 ? Colors.white : Colors.purple,
+                textColor: 
+                currentPage > 0.5 ? Colors.purple:Colors.white,
+                borderColor: currentPage > 0.5 ? Colors.purple:Colors.transparent  ,
+              )
+            )
+          ]
     );
+  
   }
 }
+      
+
 class ShopList {
   String item;
   bool done;
