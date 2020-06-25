@@ -12,20 +12,22 @@ class Option extends StatelessWidget {
       title: "Type of List",
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize:Size.fromHeight(60),
+          preferredSize:Size.fromHeight(80),
           child: AppBar(title:Text("Choose Your List",
-          style: TextStyle(fontSize: 25.0)),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
           backgroundColor: Colors.purple,
           actions: <Widget> [
-          Icon(Icons.settings, size:20.0)
+          Icon(Icons.settings, size:25.0)
         ],
           elevation: 10.0,
-          leading:Icon(Icons.menu, size:20),
+          leading:Icon(Icons.menu, size:25),
           )
 
       ),
-        body: ListOption()
-        ),
+        body: 
+
+         ListOption(),
+         ),
     );
   }
 }
@@ -38,12 +40,20 @@ class ListOption extends StatelessWidget {
 }
 
 Widget _myListOption(BuildContext context) {
-  return ListView(
+  return Column(
+     mainAxisAlignment: MainAxisAlignment.center,
+     crossAxisAlignment: CrossAxisAlignment.center,
     children:  <Widget> [
-      Card(child: ListTile(
-          leading: Icon(Icons.list, size:60),
-          title: Text("To Do List"),
-          subtitle: Text("List your tasks and plan your day with us"),
+      Container(
+        height: 140,
+        child: Card(
+        color: Colors.black87,
+        elevation: 50,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          leading: Icon(Icons.list, size:80, color: Colors.purpleAccent),
+          title: Text("To Do List", textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize:25, fontWeight: FontWeight.bold),),
+          subtitle: Text("List your tasks and plan your day with us", textAlign: TextAlign.left, style: TextStyle(color: Colors.white,fontSize:20, fontStyle: FontStyle.italic)),
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
             Navigator.push(
@@ -53,12 +63,20 @@ Widget _myListOption(BuildContext context) {
             );
           },
         ),
+        )
+        
       ),
-      Card(
+      Container(
+
+        height:140,
+        child: Card(
+        color:  Colors.black87,
+        elevation: 50,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
-          leading: Icon(Icons.local_grocery_store, size:60),
-          title: Text("Shopping List"),
-          subtitle: Text("List your items and shop together with us"),
+          leading: Icon(Icons.local_grocery_store, size:80,color: Colors.purpleAccent),
+          title: Text("Shopping List",textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize:25, fontWeight: FontWeight.bold),),
+          subtitle: Text("List your items and shop together with us", textAlign: TextAlign.left, style: TextStyle(color: Colors.white,fontSize:20, fontStyle: FontStyle.italic)),
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
             Navigator.push(
@@ -69,11 +87,18 @@ Widget _myListOption(BuildContext context) {
           },
         ),
       ),
-      Card(
+      ),
+      Container(
+
+        height:140,
+        child:Card(
+        color: Colors.black87,
+        elevation: 50,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
-          leading: Icon(Icons.fastfood, size:60),
-          title: Text("Cooking List"),
-          subtitle: Text("List your recipes and cook with us"),
+          leading: Icon(Icons.fastfood, size:80, color: Colors.purpleAccent,),
+          title: Text("Cooking List",textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize:25, fontWeight: FontWeight.bold),),
+          subtitle: Text("List your recipes and cook with us", textAlign: TextAlign.left, style: TextStyle(color: Colors.white,fontSize:20, fontStyle: FontStyle.italic)),
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
             Navigator.push(
@@ -84,11 +109,17 @@ Widget _myListOption(BuildContext context) {
           }
         ),
       ),
-      Card(
+      ),
+      Container(height: 140,
+  
+      child: Card(
+        color: Colors.black87,
+        elevation: 50,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
-          leading: Icon(Icons.airplanemode_active,size:60),
-          title: Text("Travel List"),
-          subtitle: Text("List your itineraries and travel with us"),
+          leading: Icon(Icons.airplanemode_active,size:80,color: Colors.purpleAccent),
+          title: Text("Travel List",textAlign: TextAlign.left,style: TextStyle(color: Colors.white,fontSize:25, fontWeight: FontWeight.bold),), 
+          subtitle: Text("List your itineraries and travel with us", textAlign: TextAlign.left, style: TextStyle(color: Colors.white,fontSize:20, fontStyle: FontStyle.italic)),
           trailing: Icon(Icons.keyboard_arrow_right),
           onTap: () {
             Navigator.push(
@@ -98,6 +129,7 @@ Widget _myListOption(BuildContext context) {
             );
           }
         ),
+      ),
       ),
     ],
   );
