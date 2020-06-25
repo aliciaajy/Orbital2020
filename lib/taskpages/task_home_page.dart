@@ -48,13 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 35,
             color: Theme.of(context).accentColor,
           ),
-           Positioned(
-             right: 0,
-              child: Text(
-                "6", 
-                style: TextStyle(fontSize: 200, color: Color(0x10000000)),
-        ),
-           ),
         _mainContent(context),
         ], 
       ),
@@ -100,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: const EdgeInsets.all(24.0),
           child: Text(
-          "Monday", 
+          "To-Do List", 
           style: TextStyle(
           fontSize: 32, fontWeight: FontWeight.bold),
           ),
