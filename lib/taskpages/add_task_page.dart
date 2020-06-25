@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:login/widgets/custom_date_time_picker.dart';
 import 'package:login/widgets/custom_modal_action_button.dart';
 import 'package:login/widgets/custom_textfield.dart';
@@ -10,8 +11,7 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
 
-  String _selectedDate = 'Pick a date';
-  String _selectedTime = 'Pick a date';
+  DateTime _selectedDate = DateTime.now();
 
   Future _pickDate() async {
     DateTime datepick = await showDatePicker(
@@ -22,20 +22,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
       if (datepick != null) 
       setState(() {
-        _selectedDate = datepick.toString();
+        _selectedDate = datepick ;
       });
   } 
-
-  Future _pickTime() async {
-    TimeOfDay timepicked = await showTimePicker(
-      context: context, 
-      initialTime: new TimeOfDay.now());
-    if(timepicked != null) {
-      setState(() {
-        _selectedTime = timepicked.toString();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +46,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             CustomDateTimePicker(
               icon: Icons.date_range,
               onPressed: _pickDate,
-              value: _selectedDate,
-            ),
-            CustomDateTimePicker(
-              icon: Icons.access_time,
-              onPressed: _pickTime,
-              value: _selectedTime,
+              value: new DateFormat("dd-MM-yyyy").format(_selectedDate),
             ),
             SizedBox(
               height: 24
