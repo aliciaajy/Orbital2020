@@ -50,7 +50,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
                 title: Text("Add new item"),
                 content: TextField(
                   onChanged: (String value) {
-                    input = value;
+                    input = (shoplist.length+1).toString() + ". " + value;
                   },
                 ),
                 actions: <Widget>[

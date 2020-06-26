@@ -172,7 +172,7 @@ class TravelList extends State<TravelListHomePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
           child: ListTile(
-            leading: Icon(Icons.card_travel, color: Colors.purple),
+            leading: Icon(Icons.card_travel, color: Colors.purpleAccent),
           title: Text(packinglist[index].item),
             trailing: IconButton(
               icon: Icon(
