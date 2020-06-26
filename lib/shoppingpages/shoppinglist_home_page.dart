@@ -30,7 +30,6 @@ class ShoppingList extends State<ShoppingListHomePage> {
       });
      });
     return Scaffold (
-      
 
       body: Stack(
         children: <Widget>[

@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/widgets/custom_button.dart';
-import 'package:login/cookingpages/add_recipe_page.dart';
-import 'package:login/cookingpages/add_ingredient_page.dart';
-import 'package:login/cookingpages/ingredient_page.dart';
-import 'package:login/cookingpages/recipe_page.dart';
-
+import 'package:login/pages/type_of_list.dart';
 
 class CookingListHomePage extends StatefulWidget {
   @override
@@ -16,6 +12,9 @@ class CookingList extends State<CookingListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
   String input = "";
+  TextEditingController mycontroller = TextEditingController();
+  static List<IngredList> ingredlist = List<IngredList>();
+  static List<Recipe> recipelist = new List<Recipe>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,46 +33,75 @@ class CookingList extends State<CookingListHomePage> {
         _mainContent(context),
         ], 
       ),
-      floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        showDialog(
-          barrierDismissible: false,
-          context: context, 
-          builder: (BuildContext context) {
-            return Dialog(
-              child: currentPage == 0 ? AddIngredientList() : AddRecipeList(),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12))));
-          });
-      },
-      child: Icon(Icons.add,),
-      backgroundColor: Colors.purple,
+       floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(currentPage == 0 ? "Add New Ingredient" : "Add New Steps",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              
+                content: TextField(
+                controller: mycontroller,
+                decoration: InputDecoration(hintText: currentPage == 0 ? 'Enter ingredient': "Enter steps")
+                ,
+                onChanged: (String value) {
+                    input = currentPage == 0 ? (ingredlist.length+1).toString() + ". " + value: (recipelist.length+1).toString() + ". " + value;
+                  },
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      setState( () {
+                        currentPage == 0 ? ingredlist.add(IngredList(input)) : recipelist.add(Recipe(input)) ;
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text("Add"),
+      
+                  )
+                ],
+              );
+            });
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.purple,
+        elevation: 50,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.settings),
               onPressed: () {},
-              ),
-          IconButton(
+            ),
+            IconButton(
               icon: Icon(Icons.more_vert),
-              onPressed: () {},
-          )
-          ],
-          ),
+              onPressed: () {}
+            ),
+
+          ]
+        )
       ),
-      );
+    
+    );
   }
+
 
    Widget _mainContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 60),
+        IconButton(icon:Icon(Icons.arrow_back, size: 30), onPressed:() {
+        Navigator.push(context,MaterialPageRoute(builder: (context) => Option()),
+        );
+        },
+        ),
         Padding(
           padding: const EdgeInsets.all(24.0),
           child: Text(
@@ -89,7 +117,7 @@ class CookingList extends State<CookingListHomePage> {
         Expanded(
           child: PageView(
             controller: _pageController,
-            children: <Widget>[IngredientListHomePage(), RecipeListHomePage()],
+            children: <Widget>[ingredbodycontent(context),recipebodycontent(context)],
           ))
         ],
       );
@@ -132,5 +160,77 @@ class CookingList extends State<CookingListHomePage> {
             ],
           );
         }
-      }
+  Widget ingredbodycontent(BuildContext context) {
+    return ListView.builder(
+      itemCount: ingredlist.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: UniqueKey(),//Key(shoplist[index]),
+        child: Card(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16)),
+          child: ListTile(
+            leading: Icon(Icons.check, color: Colors.purpleAccent),
+          title: Text(ingredlist[index].ingred),
+            trailing: IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.purple,
+              ),
+              onPressed: () {
+                setState(() {
+                  ingredlist.removeAt(index);
+                });
+              },
+            ),
+            
+            ),
+          ));
+        }
+    );     
+
+  }
+  Widget recipebodycontent(BuildContext context) {
+    return ListView.builder(
+      itemCount: recipelist.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: UniqueKey(),//Key(shoplist[index]),
+        child: Card(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16)),
+          child: ListTile(
+            leading: Icon(Icons.local_dining, color: Colors.purpleAccent),
+          title: Text(recipelist[index].recipe),
+            trailing: IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.purple,
+              ),
+              onPressed: () {
+                setState(() {
+                  recipelist.removeAt(index);
+                });
+              },
+            ),
+            
+            ),
+          ));
+        }
+    );   
+  }
+}
+class IngredList {
+  String ingred;
+  IngredList(this.ingred);
+
+}
+
+class Recipe{
+  String recipe;
+  Recipe(this.recipe);
+}
+
       

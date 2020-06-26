@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/widgets/custom_button.dart';
-import 'package:login/travelpages/add_itinerary_page.dart';
-import 'package:login/travelpages/add_packing_page.dart';
-import 'package:login/travelpages/itinerary_page.dart';
-import 'package:login/travelpages/packing_page.dart';
+import 'package:login/pages/type_of_list.dart';
+
 
 class TravelListHomePage extends StatefulWidget {
   @override
@@ -15,6 +13,9 @@ class TravelList extends State<TravelListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
   String input = "";
+  TextEditingController mycontroller = TextEditingController();
+  static List<Packing> packinglist = List<Packing>();
+  static List<Itinerary> itinerarylist = new List<Itinerary>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,46 +34,75 @@ class TravelList extends State<TravelListHomePage> {
         _mainContent(context),
         ], 
       ),
-      floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        showDialog(
-          barrierDismissible: false,
-          context: context, 
-          builder: (BuildContext context) {
-            return Dialog(
-              child: currentPage == 0 ? AddPackingList() : AddItineraryList(),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12))));
-          });
-      },
-      child: Icon(Icons.add,),
-      backgroundColor: Colors.purple,
+       floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(currentPage == 0 ? "Add New Item" : "Add New Destination",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              
+                content: TextField(
+                controller: mycontroller,
+                decoration: InputDecoration(hintText: currentPage == 0 ? 'Enter item': "Enter location")
+                ,
+                onChanged: (String value) {
+                    input = currentPage == 0 ? (packinglist.length+1).toString() + ". " + value: (itinerarylist.length+1).toString() + ". " + value;
+                  },
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      setState( () {
+                        currentPage == 0 ? packinglist.add(Packing(input)) : itinerarylist.add(Itinerary(input)) ;
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text("Add"),
+      
+                  )
+                ],
+              );
+            });
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.purple,
+        elevation: 50,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.settings),
               onPressed: () {},
-              ),
-          IconButton(
+            ),
+            IconButton(
               icon: Icon(Icons.more_vert),
-              onPressed: () {},
-          )
-          ],
-          ),
+              onPressed: () {}
+            ),
+
+          ]
+        )
       ),
-      );
+    
+    );
   }
+
 
    Widget _mainContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 60),
+        IconButton(icon:Icon(Icons.arrow_back, size: 30), onPressed:() {
+        Navigator.push(context,MaterialPageRoute(builder: (context) => Option()),
+        );
+        },
+        ),
         Padding(
           padding: const EdgeInsets.all(24.0),
           child: Text(
@@ -88,7 +118,7 @@ class TravelList extends State<TravelListHomePage> {
         Expanded(
           child: PageView(
             controller: _pageController,
-            children: <Widget>[PackingListHomePage(), ItineraryListHomePage()],
+            children: <Widget>[packingbodycontent(context),itinerarybodycontent(context)],
           ))
         ],
       );
@@ -131,5 +161,75 @@ class TravelList extends State<TravelListHomePage> {
             ],
           );
         }
-      }
-      
+  Widget packingbodycontent(BuildContext context) {
+    return ListView.builder(
+      itemCount: packinglist.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: UniqueKey(),//Key(shoplist[index]),
+        child: Card(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16)),
+          child: ListTile(
+            leading: Icon(Icons.card_travel, color: Colors.purple),
+          title: Text(packinglist[index].item),
+            trailing: IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.purple,
+              ),
+              onPressed: () {
+                setState(() {
+                  packinglist.removeAt(index);
+                });
+              },
+            ),
+            
+            ),
+          ));
+        }
+    );     
+
+  }
+  Widget itinerarybodycontent(BuildContext context) {
+    return ListView.builder(
+      itemCount: itinerarylist.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: UniqueKey(),//Key(shoplist[index]),
+        child: Card(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16)),
+          child: ListTile(
+            leading: Icon(Icons.airplanemode_active, color: Colors.purpleAccent),
+          title: Text(itinerarylist[index].place),
+            trailing: IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.purple,
+              ),
+              onPressed: () {
+                setState(() {
+                  itinerarylist.removeAt(index);
+                });
+              },
+            ),
+            
+            ),
+          ));
+        }
+    );   
+  }
+}
+
+class Itinerary{
+  String place;
+  Itinerary(this.place);
+}
+
+class Packing{
+  String item;
+  Packing(this.item);
+}
