@@ -1,5 +1,9 @@
 name: login
 description: A new Flutter project.
+# firebase_auth: ^0.15.3
+# google_sign_in: ^4.1.0  
+# firebase_database: ^3.1.6
+
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -24,7 +28,13 @@ dependencies:
   flutter:
     sdk: flutter
   circular_check_box: ^1.0.2
-
+  firebase_auth: ^0.15.3
+  google_sign_in: ^4.5.1 
+  fluttertoast: ^4.0.1
+  firebase_database: ^3.1.1
+  splashscreen : 1.2.0
+  flutter_signin_button: ^1.0.0
+  # firebase_database: ^3.1.6
 
 
   # The following adds the Cupertino Icons font to your application.
