@@ -36,9 +36,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Future _pickTime() async {
     TimeOfDay timepicked = await showTimePicker(
         context: context, initialTime: new TimeOfDay.now());
-    if (timepicked != null) {
+    if (timepicked != null) { 
       setState(() {
-        _selectedTime = timepicked.toString();
+        _selectedTime = timepicked.format(context);
       });
     }
   }
