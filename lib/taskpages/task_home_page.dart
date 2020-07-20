@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login/pages/type_of_list.dart';
 import 'package:login/widgets/custom_date_time_picker.dart';
 import 'package:login/widgets/custom_button.dart';
 import 'package:login/widgets/custom_icon_decoration.dart';
+//import 'package:firebase_database/firebase_database.dart';
 
 class MyTaskHomePage extends StatelessWidget {
   @override
@@ -35,6 +37,26 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   double getProportionOfWorkDone() {
     return countDoneTask / tasklist.length;
+  }
+
+  createTodos() {
+    DocumentReference documentReference = Firestore.instance.collection("MyTodos").document(input);
+
+    Map<String, String> todos = {"todoTitle": input};
+
+    documentReference.setData(todos).whenComplete(() {
+      print("$input created");
+    });
+
+  }
+
+  deleteTodos(item) {
+    DocumentReference documentReference = Firestore.instance.collection("MyTodos").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+
   }
 
   Future _pickTime() async {
@@ -119,6 +141,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () {
+                        createTodos();
                         setState(() {
                           currentPage == 0
                               ? tasklist.add(TaskList(input))
@@ -225,11 +248,21 @@ class MyTaskHomePageState extends State<MyHomePage> {
   }
 
   Widget taskbodycontent(BuildContext context) {
-    return ListView.builder(
-        itemCount: tasklist.length,
-        itemBuilder: (BuildContext context, int index) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection("MyTodos").snapshots(), 
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots){
+        if (snapshots.data == null) return CircularProgressIndicator();
+
+      return ListView.builder(
+          shrinkWrap: true,
+        itemCount: snapshots.data.documents.length,
+        itemBuilder: (context, index) {
+          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
-              key: UniqueKey(), //Key(shoplist[index]),
+            onDismissed: (direction) {
+              deleteTodos(documentSnapshot["todoTitle"]);
+            },
+              key: Key(documentSnapshot["todoTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
@@ -245,27 +278,23 @@ class MyTaskHomePageState extends State<MyHomePage> {
                           countDoneTask += 1;
                         });
                       }),
-                  title: Text(
-                    tasklist[index].task,
-                    style: TextStyle(
-                        decoration: (tasklist[index].done
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none)),
-                  ),
+                  title: Text(documentSnapshot["todoTitle"]),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      setState(() {
-                        tasklist.removeAt(index);
-                      });
+                      deleteTodos(documentSnapshot["todoTitle"]);
+                      // setState(() {
+                      //   tasklist.removeAt(index);
+                      // });
                     },
                   ),
                 ),
               ));
         });
+    });
   }
 
   Expanded _displayContent(EventList event) {
