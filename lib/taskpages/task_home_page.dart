@@ -19,24 +19,28 @@ class MyTaskHomePage extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyTaskHomePageState createState() => MyTaskHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyTaskHomePageState extends State<MyHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
   String input = "";
-  TextEditingController mycontroller = TextEditingController();
+  //TextEditingController mycontroller = TextEditingController();
   static List<TaskList> tasklist = List<TaskList>();
   static List<EventList> eventlist = new List<EventList>();
   DateTime _selectedDate = DateTime.now();
-  //String _selecteddate = 'Pick a date';
   String _selectedTime = 'Pick a time';
+  double countDoneTask = 0;
+
+  double getProportionOfWorkDone() {
+    return countDoneTask / tasklist.length;
+  }
 
   Future _pickTime() async {
     TimeOfDay timepicked = await showTimePicker(
         context: context, initialTime: new TimeOfDay.now());
-    if (timepicked != null) { 
+    if (timepicked != null) {
       setState(() {
         _selectedTime = timepicked.format(context);
       });
@@ -89,7 +93,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 24,
                         ),
                         TextField(
-                            controller: mycontroller,
                             decoration: InputDecoration(
                                 hintText: currentPage == 0
                                     ? 'Enter task'
@@ -239,6 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onChanged: (checked) {
                         setState(() {
                           tasklist[index].done = checked;
+                          countDoneTask += 1;
                         });
                       }),
                   title: Text(
@@ -347,12 +351,6 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    mycontroller.dispose();
   }
 }
 

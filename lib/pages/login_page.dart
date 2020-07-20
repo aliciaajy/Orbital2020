@@ -88,13 +88,6 @@ class LoginPageState extends State<LoginPage>
                                     signin();
                                   },
                                   splashColor: Colors.redAccent,
-                                  // onPressed: () => {
-                                  //   Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => Option()),
-                                  //   )
-                                  // },
                                 ),
                                 new MaterialButton(
                                   height: 40.0,

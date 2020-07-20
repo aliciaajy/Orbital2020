@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login/pages/login_page.dart';
+import 'package:login/progress_indicator/todolist_progress.dart';
 
 class Settings extends StatelessWidget {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -40,7 +41,11 @@ class Settings extends StatelessWidget {
               isThreeLine: true,
               subtitle: new Text(
                   'Check your percentage of work done and the progress of your lists'),
-              trailing: new Icon(Icons.hourglass_empty)),
+              trailing: new Icon(Icons.hourglass_empty),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProgressPage()));
+              }),
           new ListTile(
               title: new Text('Sign Out'),
               subtitle: new Text('Log out of your account'),

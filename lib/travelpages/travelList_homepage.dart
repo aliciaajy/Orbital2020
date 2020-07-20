@@ -12,7 +12,7 @@ class TravelList extends State<TravelListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
   String input = "";
-  TextEditingController mycontroller = TextEditingController();
+  // TextEditingController mycontroller = TextEditingController();
   static List<Packing> packinglist = List<Packing>();
   static List<Itinerary> itinerarylist = new List<Itinerary>();
 
@@ -43,7 +43,6 @@ class TravelList extends State<TravelListHomePage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   content: TextField(
-                    controller: mycontroller,
                     decoration: InputDecoration(
                         hintText:
                             currentPage == 0 ? 'Enter item' : "Enter location"),
@@ -220,12 +219,6 @@ class TravelList extends State<TravelListHomePage> {
                 ),
               ));
         });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    mycontroller.dispose();
   }
 }
 

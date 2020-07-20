@@ -163,32 +163,6 @@ class SignUpPageState extends State<SignUpPage>
                       onPressed: () {
                         signup();
                       },
-                      //   setState(() {
-                      //     showProgress = true;
-                      //   });
-                      //   if (_registerFormKey.currentState.validate()) {
-                      //     if (pwdInputController.text ==
-                      //         confirmPwdInputController.text)
-                      //       try {
-                      //         final newuser =
-                      //             await _auth.createUserWithEmailAndPassword(
-                      //                 email: emailInputController.text,
-                      //                 password: pwdInputController.text);
-                      //         if (newuser != null) {
-                      //           Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //                 builder: (context) => LoginPage()),
-                      //           );
-                      //           setState(() {
-                      //             showProgress = false;
-                      //           });
-                      //         }
-                      //       } catch (e) {
-                      //         print(e);
-                      //       }
-                      //   }
-                      // },
                       splashColor: Colors.redAccent,
                     )
                   ],

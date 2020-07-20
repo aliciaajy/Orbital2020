@@ -12,7 +12,7 @@ class CookingList extends State<CookingListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
   String input = "";
-  TextEditingController mycontroller = TextEditingController();
+
   static List<IngredList> ingredlist = List<IngredList>();
   static List<Recipe> recipelist = new List<Recipe>();
 
@@ -43,7 +43,6 @@ class CookingList extends State<CookingListHomePage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   content: TextField(
-                    controller: mycontroller,
                     decoration: InputDecoration(
                         hintText: currentPage == 0
                             ? 'Enter ingredient'
@@ -218,12 +217,6 @@ class CookingList extends State<CookingListHomePage> {
                 ),
               ));
         });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    mycontroller.dispose();
   }
 }
 
