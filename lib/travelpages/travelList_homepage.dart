@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/widgets/custom_button.dart';
 import 'package:login/pages/type_of_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TravelListHomePage extends StatefulWidget {
   @override
@@ -15,6 +16,42 @@ class TravelList extends State<TravelListHomePage> {
   // TextEditingController mycontroller = TextEditingController();
   static List<Packing> packinglist = List<Packing>();
   static List<Itinerary> itinerarylist = new List<Itinerary>();
+
+  createPackinglist() {
+  DocumentReference documentReference = Firestore.instance.collection("PackingList").document(input);
+
+    Map<String, String> packingList = {"packingListTitle": input};
+
+    documentReference.setData(packingList).whenComplete(() {
+      print("$input created");
+    });
+  }
+
+  createItinerary() {
+  DocumentReference documentReference = Firestore.instance.collection("ItineraryList").document(input);
+
+    Map<String, String> itinerary = {"itineraryTitle": input};
+
+    documentReference.setData(itinerary).whenComplete(() {
+      print("$input created");
+    });
+  }
+
+  deletePackinglist(item) {
+    DocumentReference documentReference = Firestore.instance.collection("PackingList").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+  }
+
+  deleteItinerary(item) {
+    DocumentReference documentReference = Firestore.instance.collection("ItineraryList").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +96,8 @@ class TravelList extends State<TravelListHomePage> {
                       onPressed: () {
                         setState(() {
                           currentPage == 0
-                              ? packinglist.add(Packing(input))
-                              : itinerarylist.add(Itinerary(input));
+                              ? createPackinglist()
+                              : createItinerary();
                           Navigator.pop(context);
                         });
                       },
@@ -163,40 +200,62 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   Widget packingbodycontent(BuildContext context) {
-    return ListView.builder(
-        itemCount: packinglist.length,
-        itemBuilder: (BuildContext context, int index) {
+    return StreamBuilder(
+      stream: Firestore.instance.collection("PackingList").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        if (snapshots.data == null) return CircularProgressIndicator();
+
+        return ListView.builder(
+          shrinkWrap: true,
+        itemCount: snapshots.data.documents.length,
+        itemBuilder: (context, index) {
+          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
-              key: UniqueKey(), //Key(shoplist[index]),
+            onDismissed: (direction) {
+              deletePackinglist(documentSnapshot["packingListTitle"]);
+            },
+              key: Key(documentSnapshot["packingListTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
                 child: ListTile(
                   leading: Icon(Icons.card_travel, color: Colors.purpleAccent),
-                  title: Text(packinglist[index].item),
+                  title: Text(documentSnapshot["packingListTitle"]),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      setState(() {
-                        packinglist.removeAt(index);
-                      });
+                      deletePackinglist(documentSnapshot["packingListTitle"]);
+                      // setState(() {
+                      //   packinglist.removeAt(index);
+                      // });
                     },
                   ),
                 ),
               ));
         });
+      });
   }
 
   Widget itinerarybodycontent(BuildContext context) {
-    return ListView.builder(
-        itemCount: itinerarylist.length,
-        itemBuilder: (BuildContext context, int index) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection("ItineraryList").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        if (snapshots.data == null) return CircularProgressIndicator();
+
+        return ListView.builder(
+          shrinkWrap: true,
+        itemCount: snapshots.data.documents.length,
+        itemBuilder: (context, index) {
+          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
-              key: UniqueKey(), //Key(shoplist[index]),
+            onDismissed: (direction) {
+              deleteItinerary(documentSnapshot["itineraryTitle"]);
+            },
+              key: Key(documentSnapshot["itineraryTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
@@ -204,21 +263,23 @@ class TravelList extends State<TravelListHomePage> {
                 child: ListTile(
                   leading: Icon(Icons.airplanemode_active,
                       color: Colors.purpleAccent),
-                  title: Text(itinerarylist[index].place),
+                  title: Text(documentSnapshot["itineraryTitle"]),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      setState(() {
-                        itinerarylist.removeAt(index);
-                      });
+                      deleteItinerary(documentSnapshot["itinerayTitle"]);
+                      // setState(() {
+                      //   itinerarylist.removeAt(index);
+                      // });
                     },
                   ),
                 ),
               ));
         });
+      });
   }
 }
 

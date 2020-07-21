@@ -40,23 +40,32 @@ class MyTaskHomePageState extends State<MyHomePage> {
   }
 
   createTodos() {
-    DocumentReference documentReference = Firestore.instance.collection("MyTodos").document(input);
+    DocumentReference documentReference = Firestore.instance.collection("To-DoList").document(input);
 
-    Map<String, String> todos = {"todoTitle": input};
+    Map<String, String> todos = {"taskTitle": input};
 
     documentReference.setData(todos).whenComplete(() {
       print("$input created");
     });
-
   }
 
+  createEvents() {
+    DocumentReference documentReference = Firestore.instance.collection("To-DoList").document(input);
+
+    Map<String, String> events = {"eventTitle": input};
+
+    documentReference.setData(events).whenComplete(() {
+      print("$input created");
+    });
+  }
+
+
   deleteTodos(item) {
-    DocumentReference documentReference = Firestore.instance.collection("MyTodos").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("To-Do List").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
     });
-
   }
 
   Future _pickTime() async {
@@ -141,11 +150,10 @@ class MyTaskHomePageState extends State<MyHomePage> {
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () {
-                        createTodos();
                         setState(() {
                           currentPage == 0
-                              ? tasklist.add(TaskList(input))
-                              : eventlist.add(EventList(input, _selectedTime));
+                              ? createTodos()
+                              : createEvents();
                           Navigator.pop(context);
                         });
                       },
@@ -249,7 +257,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   Widget taskbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("MyTodos").snapshots(), 
+      stream: Firestore.instance.collection("To-DoList").snapshots(), 
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots){
         if (snapshots.data == null) return CircularProgressIndicator();
 
@@ -260,9 +268,9 @@ class MyTaskHomePageState extends State<MyHomePage> {
           DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
             onDismissed: (direction) {
-              deleteTodos(documentSnapshot["todoTitle"]);
+              deleteTodos(documentSnapshot["taskTitle"]);
             },
-              key: Key(documentSnapshot["todoTitle"]), //Key(shoplist[index]),
+              key: Key(documentSnapshot["taskTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
@@ -278,14 +286,14 @@ class MyTaskHomePageState extends State<MyHomePage> {
                           countDoneTask += 1;
                         });
                       }),
-                  title: Text(documentSnapshot["todoTitle"]),
+                  title: Text(documentSnapshot["taskTitle"]),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      deleteTodos(documentSnapshot["todoTitle"]);
+                      deleteTodos(documentSnapshot["taskTitle"]);
                       // setState(() {
                       //   tasklist.removeAt(index);
                       // });
