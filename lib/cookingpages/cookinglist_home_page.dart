@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/widgets/custom_button.dart';
 import 'package:login/pages/type_of_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CookingListHomePage extends StatefulWidget {
   @override
@@ -15,6 +16,42 @@ class CookingList extends State<CookingListHomePage> {
 
   static List<IngredList> ingredlist = List<IngredList>();
   static List<Recipe> recipelist = new List<Recipe>();
+
+  createItem() {
+    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(input);
+
+    Map<String, String> items = {"itemTitle": input};
+
+    documentReference.setData(items).whenComplete(() {
+      print("$input created");
+    });
+  }
+
+  createRecipe() {
+    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(input);
+
+    Map<String, String> recipes = {"recipeTitle": input};
+
+    documentReference.setData(recipes).whenComplete(() {
+      print("$input created");
+    });
+  }
+
+  deleteItem(item) {
+    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+  }
+
+  deleteRecipe(item) {
+    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +95,10 @@ class CookingList extends State<CookingListHomePage> {
                       onPressed: () {
                         setState(() {
                           currentPage == 0
-                              ? ingredlist.add(IngredList(input))
-                              : recipelist.add(Recipe(input));
+                          ? createItem()
+                          : createRecipe();
+                              // ? ingredlist.add(IngredList(input))
+                              // : recipelist.add(Recipe(input));
                           Navigator.pop(context);
                         });
                       },
@@ -162,61 +201,85 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   Widget ingredbodycontent(BuildContext context) {
-    return ListView.builder(
-        itemCount: ingredlist.length,
-        itemBuilder: (BuildContext context, int index) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection("CookingList").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        if(snapshots.data == null) return CircularProgressIndicator();
+
+        return ListView.builder(
+          shrinkWrap: true,
+        itemCount: snapshots.data.documents.length,
+        itemBuilder: (context, index) {
+          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
-              key: UniqueKey(), //Key(shoplist[index]),
+            onDismissed: (direction) {
+              deleteItem(documentSnapshot["itemTitle"]);
+            },
+              key: Key(documentSnapshot["itemTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
                 child: ListTile(
                   leading: Icon(Icons.check, color: Colors.purpleAccent),
-                  title: Text(ingredlist[index].ingred),
+                  title: Text(documentSnapshot["itemTitle"]),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      setState(() {
-                        ingredlist.removeAt(index);
-                      });
+                      deleteItem(documentSnapshot["itemTitle"]);
+                      // setState(() {
+                      //   ingredlist.removeAt(index);
+                      // });
                     },
                   ),
                 ),
               ));
         });
+      });
   }
 
   Widget recipebodycontent(BuildContext context) {
-    return ListView.builder(
-        itemCount: recipelist.length,
-        itemBuilder: (BuildContext context, int index) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection("CookingList").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        if (snapshots.data == null) return CircularProgressIndicator();
+
+        return ListView.builder(
+          shrinkWrap: true,
+        itemCount: snapshots.data.documents.length,
+        itemBuilder: (context, index) {
+          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
-              key: UniqueKey(), //Key(shoplist[index]),
+            onDismissed: (direction) {
+              deleteRecipe(documentSnapshot["recipeTitle"]);
+            },
+              key: Key(documentSnapshot["recipeTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
                 child: ListTile(
                   leading: Icon(Icons.local_dining, color: Colors.purpleAccent),
-                  title: Text(recipelist[index].recipe),
+                  title: Text(documentSnapshot["recipeTitle"]),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.delete,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      setState(() {
-                        recipelist.removeAt(index);
-                      });
+                      deleteRecipe(documentSnapshot["recipeTitle"]);
+                      // setState(() {
+                      //   recipelist.removeAt(index);
+                      // });
                     },
                   ),
                 ),
               ));
         });
+      });
   }
 }
 
