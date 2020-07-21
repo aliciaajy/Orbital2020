@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login/pages/login_page.dart';
+import 'package:login/pages/type_of_list.dart';
 import 'package:login/progress_indicator/todolist_progress.dart';
+import 'package:login/backgroundpage/background.dart';
 
 class Settings extends StatelessWidget {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -10,6 +12,12 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Option()));
+              }),
           title: new Text('Settings'),
           backgroundColor: Colors.purple,
           centerTitle: true,
@@ -34,7 +42,10 @@ class Settings extends StatelessWidget {
             trailing: new Icon(
               Icons.format_color_fill,
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Background()));
+            },
           ),
           new ListTile(
               title: new Text('Progress'),

@@ -63,6 +63,9 @@ flutter:
   assets:
   - assets/todolist.jpg
   - assets/elogo!.png
+  - assets/motivational.jpg
+  - assets/nature.jpg
+  - assets/kakao.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

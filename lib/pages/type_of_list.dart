@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:login/pages/task_page.dart';
 import 'package:login/taskpages/task_home_page.dart';
 import 'package:login/shoppingpages/shoppinglist_home_page.dart';
 import 'package:login/cookingpages/cookinglist_home_page.dart';
@@ -13,7 +12,7 @@ class Option extends StatelessWidget {
       title: "Type of List",
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(80),
+          preferredSize: Size.fromHeight(60),
           child: AppBar(
               title: Text("Choose Your List",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
