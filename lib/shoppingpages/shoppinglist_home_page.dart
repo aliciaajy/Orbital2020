@@ -14,6 +14,26 @@ class ShoppingList extends State<ShoppingListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
 
+  int _count = 0;
+  int finalCount = 1;
+
+  void _incrementCounter() {
+    setState(() {
+      _count++;
+    });
+  }
+
+  void _setCount() {
+    setState(() {
+      finalCount = _count;
+    });
+  }
+
+  double getProportionCompleted() {
+    print(finalCount);
+    return finalCount / shoplist.length;
+  }
+
   static List<ShopList> shoplist = List<ShopList>();
   String input = "";
 
@@ -49,7 +69,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
                   title: Text("Add new item"),
                   content: TextField(
                     onChanged: (String value) {
-                      input = (shoplist.length + 1).toString() + ". " + value;
+                      input = value;
                     },
                   ),
                   actions: <Widget>[
@@ -135,9 +155,10 @@ class ShoppingList extends State<ShoppingListHomePage> {
                       checkColor: Colors.white,
                       value: shoplist[index].done,
                       onChanged: (checked) {
-                        setState(() {
-                          shoplist[index].done = checked;
-                        });
+                        // setState(() {
+                        _incrementCounter();
+                        _setCount();
+                        shoplist[index].done = checked;
                       }),
                   title: Text(
                     shoplist[index].item,

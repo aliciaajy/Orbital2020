@@ -40,7 +40,8 @@ class MyTaskHomePageState extends State<MyHomePage> {
   }
 
   createTodos() {
-    DocumentReference documentReference = Firestore.instance.collection("To-DoList").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("To-DoList").document(input);
 
     Map<String, String> todos = {"taskTitle": input};
 
@@ -50,7 +51,8 @@ class MyTaskHomePageState extends State<MyHomePage> {
   }
 
   createEvents() {
-    DocumentReference documentReference = Firestore.instance.collection("To-DoList").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("To-DoList").document(input);
 
     Map<String, String> events = {"eventTitle": input};
 
@@ -59,9 +61,9 @@ class MyTaskHomePageState extends State<MyHomePage> {
     });
   }
 
-
   deleteTodos(item) {
-    DocumentReference documentReference = Firestore.instance.collection("To-Do List").document(item);
+    DocumentReference documentReference =
+        Firestore.instance.collection("To-Do List").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -129,11 +131,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
                                     ? 'Enter task'
                                     : "Enter event"),
                             onChanged: (String value) {
-                              input = currentPage == 0
-                                  ? (tasklist.length + 1).toString() +
-                                      ". " +
-                                      value
-                                  : value;
+                              input = value;
                             }),
                         currentPage == 0
                             ? CustomDateTimePicker(
@@ -152,15 +150,15 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         setState(() {
                           if (currentPage == 0) {
-                          tasklist.add(TaskList(input ?? ''));
-                          return createTodos();
-                        } else {
-                          eventlist.add(EventList(input, _selectedTime));
-                          return createEvents();
-                        }
+                            tasklist.add(TaskList(input ?? ''));
+                            return createTodos();
+                          } else {
+                            eventlist.add(EventList(input, _selectedTime));
+                            return createEvents();
+                          }
                         });
                         Navigator.pop(context);
-                        
+
                         // setState(() {
                         //   currentPage == 0
                         //       ? tasklist.add(TaskList(input))
@@ -168,7 +166,6 @@ class MyTaskHomePageState extends State<MyHomePage> {
                         //   Navigator.pop(context);
                         // });
                       },
-                      
                       child: Text("Add"),
                     )
                   ],
@@ -269,52 +266,55 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   Widget taskbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("To-DoList").snapshots(), 
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots){
-        if (snapshots.data == null) return CircularProgressIndicator();
+        stream: Firestore.instance.collection("To-DoList").snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          if (snapshots.data == null) return CircularProgressIndicator();
 
-      return ListView.builder(
-          shrinkWrap: true,
-        itemCount: tasklist.length,
-        itemBuilder: (context, index) {
-          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
-          return Dismissible(
-            onDismissed: (direction) {
-              deleteTodos(documentSnapshot["taskTitle"]);
-            },
-              key: Key(documentSnapshot["taskTitle"]), //Key(shoplist[index]),
-              child: Card(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: ListTile(
-                  leading: Checkbox(
-                      activeColor: Colors.purple,
-                      checkColor: Colors.white,
-                      value: tasklist[index].done,
-                      onChanged: (checked) {
-                        setState(() {
-                          tasklist[index].done = checked;
-                          countDoneTask += 1;
-                        });
-                      }),
-                  title: Text(documentSnapshot["taskTitle"]),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.purple,
-                    ),
-                    onPressed: () {
+          return ListView.builder(
+              shrinkWrap: true,
+              itemCount: tasklist.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot documentSnapshot =
+                    snapshots.data.documents[index];
+                return Dismissible(
+                    onDismissed: (direction) {
                       deleteTodos(documentSnapshot["taskTitle"]);
-                      // setState(() {
-                      //   tasklist.removeAt(index);
-                      // });
                     },
-                  ),
-                ),
-              ));
+                    key: Key(
+                        documentSnapshot["taskTitle"]), //Key(shoplist[index]),
+                    child: Card(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      child: ListTile(
+                        leading: Checkbox(
+                            activeColor: Colors.purple,
+                            checkColor: Colors.white,
+                            value: tasklist[index].done,
+                            onChanged: (checked) {
+                              setState(() {
+                                tasklist[index].done = checked;
+                                countDoneTask += 1;
+                              });
+                            }),
+                        title: Text(documentSnapshot["taskTitle"]),
+                        trailing: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.purple,
+                          ),
+                          onPressed: () {
+                            deleteTodos(documentSnapshot["taskTitle"]);
+                            // setState(() {
+                            //   tasklist.removeAt(index);
+                            // });
+                          },
+                        ),
+                      ),
+                    ));
+              });
         });
-    });
   }
 
   Expanded _displayContent(EventList event) {

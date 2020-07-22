@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:login/shoppingpages/shoppinglist_home_page.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:login/taskpages/task_home_page.dart';
 
@@ -9,8 +10,6 @@ class ProgressPage extends StatefulWidget {
 }
 
 class ToDoProgressIndicator extends State<ProgressPage> {
-  double progress = MyTaskHomePageState().getProportionOfWorkDone();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +19,14 @@ class ToDoProgressIndicator extends State<ProgressPage> {
             child: Column(children: <Widget>[
           CircularPercentIndicator(
             //circular progress indicator
-            radius: 200.0, //radius for circle
-            lineWidth: 15.0, //width of circle line
+            radius: 230.0, //radius for circle
+            lineWidth: 30.0, //width of circle line
             animation: true, //animate when it shows progress indicator first
-            percent: progress,
+            percent: MyTaskHomePageState().getProportionOfWorkDone(),
             center: Text(
-              progress.toString(),
+              MyTaskHomePageState()
+                  .getProportionOfWorkDone()
+                  .toStringAsFixed(1),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ), //center text, you can set Icon as well
             footer: Text(
@@ -39,12 +40,14 @@ class ToDoProgressIndicator extends State<ProgressPage> {
           ),
           CircularPercentIndicator(
             //circular progress indicator
-            radius: 200.0, //radius for circle
-            lineWidth: 15.0, //width of circle line
+            radius: 230.0, //radius for circle
+            lineWidth: 30.0, //width of circle line
             animation: true, //animate when it shows progress indicator first
-            percent: progress,
+            percent: ShoppingList().getProportionCompleted(),
             center: Text(
-              progress.toString(),
+              (ShoppingList().getProportionCompleted() * 100)
+                      .toStringAsFixed(0) +
+                  "%",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ), //center text, you can set Icon as well
             footer: Text(
