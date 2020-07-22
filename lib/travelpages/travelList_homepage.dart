@@ -18,7 +18,7 @@ class TravelList extends State<TravelListHomePage> {
   static List<Itinerary> itinerarylist = new List<Itinerary>();
 
   createPackinglist() {
-  DocumentReference documentReference = Firestore.instance.collection("PackingList").document(input);
+  DocumentReference documentReference = Firestore.instance.collection("TravelList").document(input);
 
     Map<String, String> packingList = {"packingListTitle": input};
 
@@ -28,7 +28,7 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   createItinerary() {
-  DocumentReference documentReference = Firestore.instance.collection("ItineraryList").document(input);
+  DocumentReference documentReference = Firestore.instance.collection("TravelList").document(input);
 
     Map<String, String> itinerary = {"itineraryTitle": input};
 
@@ -38,7 +38,7 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   deletePackinglist(item) {
-    DocumentReference documentReference = Firestore.instance.collection("PackingList").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("TravelList").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -46,7 +46,7 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   deleteItinerary(item) {
-    DocumentReference documentReference = Firestore.instance.collection("ItineraryList").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("TravelList").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -201,7 +201,7 @@ class TravelList extends State<TravelListHomePage> {
 
   Widget packingbodycontent(BuildContext context) {
     return StreamBuilder(
-      stream: Firestore.instance.collection("PackingList").snapshots(),
+      stream: Firestore.instance.collection("TravelList").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (snapshots.data == null) return CircularProgressIndicator();
 
@@ -242,7 +242,7 @@ class TravelList extends State<TravelListHomePage> {
 
   Widget itinerarybodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("ItineraryList").snapshots(),
+      stream: Firestore.instance.collection("TravelList").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (snapshots.data == null) return CircularProgressIndicator();
 

@@ -27,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 class MyTaskHomePageState extends State<MyHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
-  String input = "";
+  String input;
   //TextEditingController mycontroller = TextEditingController();
   static List<TaskList> tasklist = List<TaskList>();
   static List<EventList> eventlist = new List<EventList>();
@@ -151,12 +151,24 @@ class MyTaskHomePageState extends State<MyHomePage> {
                     FlatButton(
                       onPressed: () {
                         setState(() {
-                          currentPage == 0
-                              ? createTodos()
-                              : createEvents();
-                          Navigator.pop(context);
+                          if (currentPage == 0) {
+                          tasklist.add(TaskList(input ?? ''));
+                          return createTodos();
+                        } else {
+                          eventlist.add(EventList(input, _selectedTime));
+                          return createEvents();
+                        }
                         });
+                        Navigator.pop(context);
+                        
+                        // setState(() {
+                        //   currentPage == 0
+                        //       ? tasklist.add(TaskList(input))
+                        //       : eventlist.add(EventList(input, _selectedTime));
+                        //   Navigator.pop(context);
+                        // });
                       },
+                      
                       child: Text("Add"),
                     )
                   ],
@@ -263,7 +275,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
       return ListView.builder(
           shrinkWrap: true,
-        itemCount: snapshots.data.documents.length,
+        itemCount: tasklist.length,
         itemBuilder: (context, index) {
           DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
