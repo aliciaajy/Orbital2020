@@ -145,7 +145,9 @@ class MyTaskHomePageState extends State<MyHomePage> {
                                     ? 'Enter task'
                                     : "Enter event"),
                             onChanged: (String value) {
-                              input = value;
+                              setState(() {
+                                input = value;
+                              });
                             }),
                         currentPage == 0
                             ? CustomDateTimePicker(
@@ -164,22 +166,18 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         setState(() {
                           if (currentPage == 0) {
-                            
                             tasklist.add(TaskList(input));
                             createTodos();
-
                           } else {
-                            
                             eventlist.add(EventList(input, _selectedTime));
                             createEvents();
                           }
-                        
+
                           // currentPage == 0
                           //       ? createTodos()
                           //       : createEvents();
-                              // ? tasklist.add(TaskList(input))
-                              // : eventlist.add(EventList(input, _selectedTime));
-                          
+                          // ? tasklist.add(TaskList(input))
+                          // : eventlist.add(EventList(input, _selectedTime));
                         });
                         Navigator.pop(context);
                       },
@@ -322,8 +320,8 @@ class MyTaskHomePageState extends State<MyHomePage> {
                           ),
                           onPressed: () {
                             // setState(() {
-                              deleteTodos(documentSnapshot["taskTitle"]);
-                              // tasklist.removeAt(index);
+                            deleteTodos(documentSnapshot["taskTitle"]);
+                            // tasklist.removeAt(index);
                             // });
                           },
                         ),
