@@ -22,18 +22,18 @@ class ToDoProgressIndicator extends State<ProgressPage> {
             radius: 230.0, //radius for circle
             lineWidth: 30.0, //width of circle line
             animation: true, //animate when it shows progress indicator first
-            percent: MyTaskHomePageState().getProportionOfWorkDone(),
+            percent: MyTaskHomePageState().getProportionCompleted(),
             center: Text(
-              MyTaskHomePageState()
-                  .getProportionOfWorkDone()
-                  .toStringAsFixed(1),
+              (MyTaskHomePageState().getProportionCompleted() * 100)
+                      .toStringAsFixed(1) +
+                  "%",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ), //center text, you can set Icon as well
             footer: Text(
-              "To Do List Progress: Proportion of work done",
+              "To Do List: Proportion of work done",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
             ), //footer text
-            backgroundColor: Colors.redAccent, //backround of progress bar
+            backgroundColor: Colors.grey, //backround of progress bar
             circularStrokeCap: CircularStrokeCap
                 .round, //corner shape of progress bar at start/end
             progressColor: Colors.green[300], //progress bar color
@@ -46,7 +46,7 @@ class ToDoProgressIndicator extends State<ProgressPage> {
             percent: ShoppingList().getProportionCompleted(),
             center: Text(
               (ShoppingList().getProportionCompleted() * 100)
-                      .toStringAsFixed(0) +
+                      .toStringAsFixed(1) +
                   "%",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ), //center text, you can set Icon as well

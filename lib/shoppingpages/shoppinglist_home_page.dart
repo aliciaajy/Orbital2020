@@ -13,25 +13,15 @@ class ShoppingListHomePage extends StatefulWidget {
 class ShoppingList extends State<ShoppingListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
-
-  int _count = 0;
-  int finalCount = 1;
-
-  void _incrementCounter() {
-    setState(() {
-      _count++;
-    });
-  }
-
-  void _setCount() {
-    setState(() {
-      finalCount = _count;
-    });
-  }
+  int _counter = 0;
 
   double getProportionCompleted() {
-    print(finalCount);
-    return finalCount / shoplist.length;
+    for (var i = 0; i < shoplist.length; i++) {
+      if (shoplist[i].done != false) {
+        _counter++;
+      }
+    }
+    return _counter / shoplist.length;
   }
 
   static List<ShopList> shoplist = List<ShopList>();
@@ -155,10 +145,10 @@ class ShoppingList extends State<ShoppingListHomePage> {
                       checkColor: Colors.white,
                       value: shoplist[index].done,
                       onChanged: (checked) {
-                        // setState(() {
-                        _incrementCounter();
-                        _setCount();
-                        shoplist[index].done = checked;
+                        setState(() {
+                          //_incrementCounter();
+                          shoplist[index].done = checked;
+                        });
                       }),
                   title: Text(
                     shoplist[index].item,

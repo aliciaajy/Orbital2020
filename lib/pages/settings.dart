@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login/pages/login_page.dart';
 import 'package:login/pages/type_of_list.dart';
-import 'package:login/progress_indicator/todolist_progress.dart';
+import 'package:login/progress_indicator/progress_indicator.dart';
 import 'package:login/backgroundpage/background.dart';
 
 class Settings extends StatelessWidget {

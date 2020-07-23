@@ -33,10 +33,15 @@ class MyTaskHomePageState extends State<MyHomePage> {
   static List<EventList> eventlist = new List<EventList>();
   DateTime _selectedDate = DateTime.now();
   String _selectedTime = 'Pick a time';
-  double countDoneTask = 0;
+  int _counter = 0;
 
-  double getProportionOfWorkDone() {
-    return countDoneTask / tasklist.length;
+  double getProportionCompleted() {
+    for (var i = 0; i < tasklist.length; i++) {
+      if (tasklist[i].done != false) {
+        _counter++;
+      }
+    }
+    return _counter / tasklist.length;
   }
 
   createTodos() {
@@ -295,7 +300,6 @@ class MyTaskHomePageState extends State<MyHomePage> {
                             onChanged: (checked) {
                               setState(() {
                                 tasklist[index].done = checked;
-                                countDoneTask += 1;
                               });
                             }),
                         title: Text(documentSnapshot["taskTitle"]),
