@@ -18,7 +18,7 @@ class CookingList extends State<CookingListHomePage> {
   static List<Recipe> recipelist = new List<Recipe>();
 
   createItem() {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(input);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(input);
 
     Map<String, String> items = {"itemTitle": input};
 
@@ -28,7 +28,7 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   createRecipe() {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(input);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - recipe").document(input);
 
     Map<String, String> recipes = {"recipeTitle": input};
 
@@ -38,7 +38,7 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   deleteItem(item) {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -46,7 +46,7 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   deleteRecipe(item) {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - recipe").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -202,7 +202,7 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget ingredbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("CookingList").snapshots(),
+      stream: Firestore.instance.collection("CookingList - ingred").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if(snapshots.data == null) return CircularProgressIndicator();
 
@@ -243,7 +243,7 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget recipebodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("CookingList").snapshots(),
+      stream: Firestore.instance.collection("CookingList - recipe").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (snapshots.data == null) return CircularProgressIndicator();
 

@@ -18,17 +18,17 @@ class TravelList extends State<TravelListHomePage> {
   static List<Itinerary> itinerarylist = new List<Itinerary>();
 
   createPackinglist() {
-  DocumentReference documentReference = Firestore.instance.collection("TravelList").document(input);
+  DocumentReference documentReference = Firestore.instance.collection("TravelList - packing").document(input);
 
-    Map<String, String> packingList = {"packingListTitle": input};
+    Map<String, String> items = {"packingListTitle": input};
 
-    documentReference.setData(packingList).whenComplete(() {
+    documentReference.setData(items).whenComplete(() {
       print("$input created");
     });
   }
 
   createItinerary() {
-  DocumentReference documentReference = Firestore.instance.collection("TravelList").document(input);
+  DocumentReference documentReference = Firestore.instance.collection("TravelList - itinerary").document(input);
 
     Map<String, String> itinerary = {"itineraryTitle": input};
 
@@ -38,7 +38,7 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   deletePackinglist(item) {
-    DocumentReference documentReference = Firestore.instance.collection("TravelList").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("TravelList - packing").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -46,7 +46,7 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   deleteItinerary(item) {
-    DocumentReference documentReference = Firestore.instance.collection("TravelList").document(item);
+    DocumentReference documentReference = Firestore.instance.collection("TravelList - itinerary").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -200,8 +200,8 @@ class TravelList extends State<TravelListHomePage> {
   }
 
   Widget packingbodycontent(BuildContext context) {
-    return StreamBuilder(
-      stream: Firestore.instance.collection("TravelList").snapshots(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection("TravelList - packing").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (snapshots.data == null) return CircularProgressIndicator();
 
@@ -242,7 +242,7 @@ class TravelList extends State<TravelListHomePage> {
 
   Widget itinerarybodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("TravelList").snapshots(),
+      stream: Firestore.instance.collection("TravelList - itinerary").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (snapshots.data == null) return CircularProgressIndicator();
 
@@ -270,7 +270,7 @@ class TravelList extends State<TravelListHomePage> {
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      deleteItinerary(documentSnapshot["itinerayTitle"]);
+                      deleteItinerary(documentSnapshot["itineraryTitle"]);
                       // setState(() {
                       //   itinerarylist.removeAt(index);
                       // });

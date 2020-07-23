@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+//import 'package:flutter/rendering.dart';
 import 'package:login/pages/type_of_list.dart';
 import 'package:login/widgets/custom_button.dart';
 import 'package:login/backgroundpage/background.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShoppingListHomePage extends StatefulWidget {
   @override
@@ -31,6 +32,26 @@ class ShoppingList extends State<ShoppingListHomePage> {
   void initState() {
     super.initState();
   }
+
+  createShoppingItem() {
+  DocumentReference documentReference = Firestore.instance.collection("ShoppingList").document(input);
+
+    Map<String, String> items = {"itemTitle": input};
+
+    documentReference.setData(items).whenComplete(() {
+      print("$input created");
+    });
+  }
+
+  deleteShoppingItem(item) {
+    DocumentReference documentReference = Firestore.instance.collection("ShoppingList").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +87,15 @@ class ShoppingList extends State<ShoppingListHomePage> {
                     FlatButton(
                       onPressed: () {
                         setState(() {
-                          shoplist.add(ShopList(input));
+                          if (currentPage == 0) {
+                            createShoppingItem();
+                            return shoplist.add(ShopList(input ?? ''));
+                          }
+                          });
+                          //createShoppingItem();
+                          //shoplist.add(ShopList(input));
                           Navigator.pop(context);
-                        });
+                        
                       },
                       child: Text("Add"),
                     )
@@ -130,11 +157,21 @@ class ShoppingList extends State<ShoppingListHomePage> {
   }
 
   Widget bodycontent(BuildContext context) {
-    return ListView.builder(
-        itemCount: shoplist.length,
-        itemBuilder: (BuildContext context, int index) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection("ShoppingList").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        if (snapshots.data == null) return CircularProgressIndicator();
+
+        return ListView.builder(
+          shrinkWrap: true,
+        itemCount: snapshots.data.documents.length,
+        itemBuilder: (context, index) {
+          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
           return Dismissible(
-              key: UniqueKey(), //Key(shoplist[index]),
+            onDismissed: (direction) {
+              deleteShoppingItem(documentSnapshot["itemTitle"]);
+            },
+              key: Key(documentSnapshot["itemTitle"]), //Key(shoplist[index]),
               child: Card(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
@@ -150,12 +187,12 @@ class ShoppingList extends State<ShoppingListHomePage> {
                           shoplist[index].done = checked;
                         });
                       }),
-                  title: Text(
-                    shoplist[index].item,
-                    style: TextStyle(
-                        decoration: (shoplist[index].done
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none)),
+                  title: Text(documentSnapshot["itemTitle"],
+                    // shoplist[index].item,
+                    // style: TextStyle(
+                    //     decoration: (shoplist[index].done
+                    //         ? TextDecoration.lineThrough
+                    //         : TextDecoration.none)),
                   ),
                   trailing: IconButton(
                     icon: Icon(
@@ -163,14 +200,17 @@ class ShoppingList extends State<ShoppingListHomePage> {
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      setState(() {
-                        shoplist.removeAt(index);
-                      });
+                      deleteShoppingItem(documentSnapshot["itemTitle"]);
+                      // setState(() {
+                      //   //shoplist.removeAt(index);
+                      //   deleteShoppingItem(documentSnapshot["itemTitle"]);
+                      // });
                     },
                   ),
                 ),
               ));
         });
+      });
   }
 
   Widget _button(BuildContext context) {

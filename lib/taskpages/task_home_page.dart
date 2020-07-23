@@ -46,7 +46,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   createTodos() {
     DocumentReference documentReference =
-        Firestore.instance.collection("To-DoList").document(input);
+        Firestore.instance.collection("To-DoList - task").document(input);
 
     Map<String, String> todos = {"taskTitle": input};
 
@@ -57,7 +57,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   createEvents() {
     DocumentReference documentReference =
-        Firestore.instance.collection("To-DoList").document(input);
+        Firestore.instance.collection("To-DoList - event").document(input);
 
     Map<String, String> events = {"eventTitle": input};
 
@@ -68,7 +68,16 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   deleteTodos(item) {
     DocumentReference documentReference =
-        Firestore.instance.collection("To-Do List").document(item);
+        Firestore.instance.collection("To-DoList - task").document(item);
+
+    documentReference.delete().whenComplete(() {
+      print("$item deleted");
+    });
+  }
+
+  deleteEvents(item) {
+    DocumentReference documentReference =
+        Firestore.instance.collection("To-DoList - event").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -141,13 +150,13 @@ class MyTaskHomePageState extends State<MyHomePage> {
                         currentPage == 0
                             ? CustomDateTimePicker(
                                 icon: Icons.date_range,
-                                onPressed: _pickDate,
+                                onPressed: _pickDate ?? '',
                                 value: new DateFormat("dd-MM-yyyy")
                                     .format(_selectedDate))
                             : CustomDateTimePicker(
                                 icon: Icons.access_time,
                                 onPressed: _pickTime,
-                                value: _selectedTime,
+                                value: _selectedTime ?? '',
                               ),
                       ]),
                   actions: <Widget>[
@@ -155,21 +164,24 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         setState(() {
                           if (currentPage == 0) {
-                            tasklist.add(TaskList(input ?? ''));
-                            return createTodos();
+                            
+                            tasklist.add(TaskList(input));
+                            createTodos();
+
                           } else {
+                            
                             eventlist.add(EventList(input, _selectedTime));
-                            return createEvents();
+                            createEvents();
                           }
+                        
+                          // currentPage == 0
+                          //       ? createTodos()
+                          //       : createEvents();
+                              // ? tasklist.add(TaskList(input))
+                              // : eventlist.add(EventList(input, _selectedTime));
+                          
                         });
                         Navigator.pop(context);
-
-                        // setState(() {
-                        //   currentPage == 0
-                        //       ? tasklist.add(TaskList(input))
-                        //       : eventlist.add(EventList(input, _selectedTime));
-                        //   Navigator.pop(context);
-                        // });
                       },
                       child: Text("Add"),
                     )
@@ -271,7 +283,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   Widget taskbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("To-DoList").snapshots(),
+        stream: Firestore.instance.collection("To-DoList - task").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (snapshots.data == null) return CircularProgressIndicator();
@@ -309,9 +321,9 @@ class MyTaskHomePageState extends State<MyHomePage> {
                             color: Colors.purple,
                           ),
                           onPressed: () {
-                            deleteTodos(documentSnapshot["taskTitle"]);
                             // setState(() {
-                            //   tasklist.removeAt(index);
+                              deleteTodos(documentSnapshot["taskTitle"]);
+                              // tasklist.removeAt(index);
                             // });
                           },
                         ),
