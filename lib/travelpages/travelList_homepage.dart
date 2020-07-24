@@ -203,7 +203,11 @@ class TravelList extends State<TravelListHomePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection("TravelList - packing").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (snapshots.data == null) return CircularProgressIndicator();
+        if (snapshots.hasError)
+          return Text('Error: ${snapshots.error}');
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting: return Text('Loading...');
+            default: 
 
         return ListView.builder(
           shrinkWrap: true,
@@ -237,6 +241,7 @@ class TravelList extends State<TravelListHomePage> {
                 ),
               ));
         });
+          }
       });
   }
 
@@ -244,7 +249,11 @@ class TravelList extends State<TravelListHomePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection("TravelList - itinerary").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (snapshots.data == null) return CircularProgressIndicator();
+       if (snapshots.hasError)
+          return Text('Error: ${snapshots.error}');
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting: return Text('Loading...');
+            default: 
 
         return ListView.builder(
           shrinkWrap: true,
@@ -279,7 +288,8 @@ class TravelList extends State<TravelListHomePage> {
                 ),
               ));
         });
-      });
+      }
+    });
   }
 }
 

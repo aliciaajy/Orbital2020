@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login/pages/type_of_list.dart';
@@ -163,7 +164,10 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       ]),
                   actions: <Widget>[
                     FlatButton(
-                      onPressed: () {
+                      onPressed: ()  {
+                        //async
+
+                        //await Firestore.instance.collection("To-DoList - task").add({'name': controller.text, 'completed': false});
                         setState(() {
                           if (currentPage == 0) {
                             tasklist.add(TaskList(input));
@@ -284,9 +288,13 @@ class MyTaskHomePageState extends State<MyHomePage> {
         stream: Firestore.instance.collection("To-DoList - task").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-          if (snapshots.data == null) return CircularProgressIndicator();
+          if (snapshots.hasError)
+          return Text('Error: ${snapshots.error}');
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting: return Text('Loading...');
+            default: 
 
-          return ListView.builder(
+            return ListView.builder(
               shrinkWrap: true,
               itemCount: tasklist.length,
               itemBuilder: (context, index) {
@@ -328,6 +336,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       ),
                     ));
               });
+            }
         });
   }
 

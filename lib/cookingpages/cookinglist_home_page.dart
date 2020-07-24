@@ -204,7 +204,11 @@ class CookingList extends State<CookingListHomePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection("CookingList - ingred").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if(snapshots.data == null) return CircularProgressIndicator();
+        if (snapshots.hasError)
+          return Text('Error: ${snapshots.error}');
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting: return Text('Loading...');
+            default: 
 
         return ListView.builder(
           shrinkWrap: true,
@@ -238,6 +242,7 @@ class CookingList extends State<CookingListHomePage> {
                 ),
               ));
         });
+          }
       });
   }
 
@@ -245,7 +250,11 @@ class CookingList extends State<CookingListHomePage> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection("CookingList - recipe").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (snapshots.data == null) return CircularProgressIndicator();
+        if (snapshots.hasError)
+          return Text('Error: ${snapshots.error}');
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting: return Text('Loading...');
+            default: 
 
         return ListView.builder(
           shrinkWrap: true,
@@ -279,6 +288,7 @@ class CookingList extends State<CookingListHomePage> {
                 ),
               ));
         });
+          }
       });
   }
 }

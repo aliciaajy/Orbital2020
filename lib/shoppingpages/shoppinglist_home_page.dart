@@ -159,8 +159,13 @@ class ShoppingList extends State<ShoppingListHomePage> {
   Widget bodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance.collection("ShoppingList").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (snapshots.data == null) return CircularProgressIndicator();
+      builder: 
+      (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+       if (snapshots.hasError)
+          return Text('Error: ${snapshots.error}');
+          switch (snapshots.connectionState) {
+            case ConnectionState.waiting: return Text('Loading...');
+            default: 
 
         return ListView.builder(
           shrinkWrap: true,
@@ -209,8 +214,9 @@ class ShoppingList extends State<ShoppingListHomePage> {
                   ),
                 ),
               ));
-        });
-      });
+            });
+        }
+    });
   }
 
   Widget _button(BuildContext context) {
