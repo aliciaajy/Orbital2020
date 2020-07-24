@@ -34,7 +34,8 @@ class ShoppingList extends State<ShoppingListHomePage> {
   }
 
   createShoppingItem() {
-  DocumentReference documentReference = Firestore.instance.collection("ShoppingList").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("ShoppingList").document(input);
 
     Map<String, String> items = {"itemTitle": input};
 
@@ -44,14 +45,13 @@ class ShoppingList extends State<ShoppingListHomePage> {
   }
 
   deleteShoppingItem(item) {
-    DocumentReference documentReference = Firestore.instance.collection("ShoppingList").document(item);
+    DocumentReference documentReference =
+        Firestore.instance.collection("ShoppingList").document(item);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +63,9 @@ class ShoppingList extends State<ShoppingListHomePage> {
     return Scaffold(
       body: Stack(children: <Widget>[
         Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-            fit: BoxFit.cover,
-            image: new AssetImage(BackgroundPage().getBackgroundAssetName()),
-          )), //Theme.of(context).accentColor,
-        ),
+          height: 35,
+          color: Colors.purple,
+        ), //Theme.of(context).accentColor,
         _mainContent(context)
       ]),
       floatingActionButton: new FloatingActionButton(
@@ -91,11 +88,10 @@ class ShoppingList extends State<ShoppingListHomePage> {
                             createShoppingItem();
                             return shoplist.add(ShopList(input ?? ''));
                           }
-                          });
-                          //createShoppingItem();
-                          //shoplist.add(ShopList(input));
-                          Navigator.pop(context);
-                        
+                        });
+                        //createShoppingItem();
+                        //shoplist.add(ShopList(input));
+                        Navigator.pop(context);
                       },
                       child: Text("Add"),
                     )
@@ -123,100 +119,110 @@ class ShoppingList extends State<ShoppingListHomePage> {
   }
 
   Widget _mainContent(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 60),
-        IconButton(
-          icon: Icon(Icons.arrow_back, size: 30),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Option()),
-            );
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Text(
-            "Shopping List",
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: _button(context),
-        ),
-        Expanded(
-            child: PageView(
-          controller: _pageController,
-          children: <Widget>[bodycontent(context)],
-        ))
-      ],
-    );
+    return Container(
+        decoration: BoxDecoration(
+            //backgroundBlendMode: BlendMode.darken,
+            image: DecorationImage(
+                image: AssetImage('assets/motivational.jpg'),
+                //BackgroundPage().getBackgroundAssetName()),
+                fit: BoxFit.cover)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 60),
+            IconButton(
+              icon: Icon(Icons.arrow_back, size: 30),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Option()),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Text(
+                "Shopping List",
+                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: _button(context),
+            ),
+            Expanded(
+                child: PageView(
+              controller: _pageController,
+              children: <Widget>[bodycontent(context)],
+            ))
+          ],
+        ));
   }
 
   Widget bodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("ShoppingList").snapshots(),
-      builder: 
-      (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-       if (snapshots.hasError)
-          return Text('Error: ${snapshots.error}');
+        stream: Firestore.instance.collection("ShoppingList").snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          if (snapshots.hasError) return Text('Error: ${snapshots.error}');
           switch (snapshots.connectionState) {
-            case ConnectionState.waiting: return Text('Loading...');
-            default: 
-
-        return ListView.builder(
-          shrinkWrap: true,
-        itemCount: snapshots.data.documents.length,
-        itemBuilder: (context, index) {
-          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
-          return Dismissible(
-            onDismissed: (direction) {
-              deleteShoppingItem(documentSnapshot["itemTitle"]);
-            },
-              key: Key(documentSnapshot["itemTitle"]), //Key(shoplist[index]),
-              child: Card(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: ListTile(
-                  leading: Checkbox(
-                      activeColor: Colors.purple,
-                      checkColor: Colors.white,
-                      value: shoplist[index].done,
-                      onChanged: (checked) {
-                        setState(() {
-                          //_incrementCounter();
-                          shoplist[index].done = checked;
-                        });
-                      }),
-                  title: Text(documentSnapshot["itemTitle"],
-                    // shoplist[index].item,
-                    // style: TextStyle(
-                    //     decoration: (shoplist[index].done
-                    //         ? TextDecoration.lineThrough
-                    //         : TextDecoration.none)),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.purple,
-                    ),
-                    onPressed: () {
-                      deleteShoppingItem(documentSnapshot["itemTitle"]);
-                      // setState(() {
-                      //   //shoplist.removeAt(index);
-                      //   deleteShoppingItem(documentSnapshot["itemTitle"]);
-                      // });
-                    },
-                  ),
-                ),
-              ));
-            });
-        }
-    });
+            case ConnectionState.waiting:
+              return Text('Loading...');
+            default:
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshots.data.documents.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot documentSnapshot =
+                        snapshots.data.documents[index];
+                    return Dismissible(
+                        onDismissed: (direction) {
+                          deleteShoppingItem(documentSnapshot["itemTitle"]);
+                        },
+                        key: Key(documentSnapshot[
+                            "itemTitle"]), //Key(shoplist[index]),
+                        child: Card(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: ListTile(
+                            leading: Checkbox(
+                                activeColor: Colors.purple,
+                                checkColor: Colors.white,
+                                value: shoplist[index].done,
+                                onChanged: (checked) {
+                                  setState(() {
+                                    //_incrementCounter();
+                                    shoplist[index].done = checked;
+                                  });
+                                }),
+                            title: Text(
+                              documentSnapshot["itemTitle"],
+                              // shoplist[index].item,
+                              // style: TextStyle(
+                              //     decoration: (shoplist[index].done
+                              //         ? TextDecoration.lineThrough
+                              //         : TextDecoration.none)),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.purple,
+                              ),
+                              onPressed: () {
+                                deleteShoppingItem(
+                                    documentSnapshot["itemTitle"]);
+                                // setState(() {
+                                //   //shoplist.removeAt(index);
+                                //   deleteShoppingItem(documentSnapshot["itemTitle"]);
+                                // });
+                              },
+                            ),
+                          ),
+                        ));
+                  });
+          }
+        });
   }
 
   Widget _button(BuildContext context) {

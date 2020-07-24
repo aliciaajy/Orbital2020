@@ -34,6 +34,7 @@ class BackgroundPage extends State<Background> {
   String selected = '';
 
   String getBackgroundAssetName() {
+    print(selected);
     return selected;
   }
 
@@ -46,7 +47,7 @@ class BackgroundPage extends State<Background> {
             elevation: 100,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-            child: Container(
+            child: Ink(
               height: 180,
               decoration: BoxDecoration(
                   color: Colors.black87,
@@ -71,9 +72,9 @@ class BackgroundPage extends State<Background> {
                         fontSize: 20,
                         fontStyle: FontStyle.italic)),
                 onTap: () {
-                  selected = 'assets/motivational.jpg';
-                  print(selected);
-                  print('tapped');
+                  setState(() {
+                    selected = 'assets/motivational.jpg';
+                  });
                 },
               ),
             )),
@@ -81,7 +82,7 @@ class BackgroundPage extends State<Background> {
           elevation: 100,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-          child: Container(
+          child: Ink(
               height: 180,
               decoration: BoxDecoration(
                   color: Colors.black87,
@@ -106,7 +107,9 @@ class BackgroundPage extends State<Background> {
                         fontSize: 20,
                         fontStyle: FontStyle.italic)),
                 onTap: () {
-                  selected = 'assets/nature.jpg';
+                  setState(() {
+                    selected = 'assets/nature.jpg';
+                  });
                 },
               )),
         ),
@@ -114,7 +117,7 @@ class BackgroundPage extends State<Background> {
             elevation: 100,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-            child: Container(
+            child: Ink(
               height: 180,
               decoration: BoxDecoration(
                   color: Colors.black87,
@@ -139,7 +142,9 @@ class BackgroundPage extends State<Background> {
                         fontSize: 20,
                         fontStyle: FontStyle.italic)),
                 onTap: () {
-                  selected = 'assets/kakao.jpg';
+                  setState(() {
+                    selected = 'assets/kakao.jpg';
+                  });
                 },
               ),
             ))

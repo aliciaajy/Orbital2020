@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:login/shoppingpages/shoppinglist_home_page.dart';
+//import 'package:login/shoppingpages/shoppinglist_home_page.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:login/taskpages/task_home_page.dart';
 
@@ -33,7 +33,7 @@ class ToDoProgressIndicator extends State<ProgressPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                 ), //center text, you can set Icon as well
                 footer: Text(
-                  "Percentage Of Tasks Done",
+                  "Percentage Of Work Done",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                 ), //footer text
                 backgroundColor: Colors.black12, //backround of progress bar
