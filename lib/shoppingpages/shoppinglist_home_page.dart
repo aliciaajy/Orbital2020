@@ -14,16 +14,6 @@ class ShoppingListHomePage extends StatefulWidget {
 class ShoppingList extends State<ShoppingListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
-  int _counter = 0;
-
-  double getProportionCompleted() {
-    for (var i = 0; i < shoplist.length; i++) {
-      if (shoplist[i].done != false) {
-        _counter++;
-      }
-    }
-    return _counter / shoplist.length;
-  }
 
   static List<ShopList> shoplist = List<ShopList>();
   String input = "";
@@ -119,44 +109,50 @@ class ShoppingList extends State<ShoppingListHomePage> {
   }
 
   Widget _mainContent(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            //backgroundBlendMode: BlendMode.darken,
-            image: DecorationImage(
-                image: AssetImage('assets/motivational.jpg'),
-                //BackgroundPage().getBackgroundAssetName()),
-                fit: BoxFit.cover)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 60),
-            IconButton(
-              icon: Icon(Icons.arrow_back, size: 30),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Option()),
-                );
-              },
+    return Scaffold(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        body: new Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        new Image(
+          image: new AssetImage(BackgroundPage().getBackgroundAssetName()),
+          fit: BoxFit.cover,
+          color: Colors.black87,
+          colorBlendMode: BlendMode.darken,
+        ),
+        Column(children: <Widget>[
+          SizedBox(height: 60),
+          IconButton(
+            icon: Icon(Icons.arrow_back, size: 30),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Option()),
+              );
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Text(
+              "Shopping List",
+              style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purpleAccent),
             ),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Text(
-                "Shopping List",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: _button(context),
-            ),
-            Expanded(
-                child: PageView(
-              controller: _pageController,
-              children: <Widget>[bodycontent(context)],
-            ))
-          ],
-        ));
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: _button(context),
+          ),
+          Expanded(
+              child: PageView(
+            controller: _pageController,
+            children: <Widget>[bodycontent(context)],
+          ))
+        ])
+      ],
+    ));
   }
 
   Widget bodycontent(BuildContext context) {

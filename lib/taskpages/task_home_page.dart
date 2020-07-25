@@ -34,6 +34,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
   static List<EventList> eventlist = new List<EventList>();
   DateTime _selectedDate = DateTime.now();
   String _selectedTime = 'Pick a time';
+
   int _counter = 0;
 
   double getProportionCompleted() {
@@ -164,7 +165,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       ]),
                   actions: <Widget>[
                     FlatButton(
-                      onPressed: ()  {
+                      onPressed: () {
                         //async
 
                         //await Firestore.instance.collection("To-DoList - task").add({'name': controller.text, 'completed': false});
@@ -288,55 +289,54 @@ class MyTaskHomePageState extends State<MyHomePage> {
         stream: Firestore.instance.collection("To-DoList - task").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-          if (snapshots.hasError)
-          return Text('Error: ${snapshots.error}');
+          if (snapshots.hasError) return Text('Error: ${snapshots.error}');
           switch (snapshots.connectionState) {
-            case ConnectionState.waiting: return Text('Loading...');
-            default: 
-
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: tasklist.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot documentSnapshot =
-                    snapshots.data.documents[index];
-                return Dismissible(
-                    onDismissed: (direction) {
-                      deleteTodos(documentSnapshot["taskTitle"]);
-                    },
-                    key: Key(
-                        documentSnapshot["taskTitle"]), //Key(shoplist[index]),
-                    child: Card(
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      child: ListTile(
-                        leading: Checkbox(
-                            activeColor: Colors.purple,
-                            checkColor: Colors.white,
-                            value: tasklist[index].done,
-                            onChanged: (checked) {
-                              setState(() {
-                                tasklist[index].done = checked;
-                              });
-                            }),
-                        title: Text(documentSnapshot["taskTitle"]),
-                        trailing: IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.purple,
+            case ConnectionState.waiting:
+              return Text('Loading...');
+            default:
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: tasklist.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot documentSnapshot =
+                        snapshots.data.documents[index];
+                    return Dismissible(
+                        onDismissed: (direction) {
+                          deleteTodos(documentSnapshot["taskTitle"]);
+                        },
+                        key: Key(documentSnapshot[
+                            "taskTitle"]), //Key(shoplist[index]),
+                        child: Card(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: ListTile(
+                            leading: Checkbox(
+                                activeColor: Colors.purple,
+                                checkColor: Colors.white,
+                                value: tasklist[index].done,
+                                onChanged: (checked) {
+                                  setState(() {
+                                    tasklist[index].done = checked;
+                                  });
+                                }),
+                            title: Text(documentSnapshot["taskTitle"]),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.purple,
+                              ),
+                              onPressed: () {
+                                // setState(() {
+                                deleteTodos(documentSnapshot["taskTitle"]);
+                                // tasklist.removeAt(index);
+                                // });
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            // setState(() {
-                            deleteTodos(documentSnapshot["taskTitle"]);
-                            // tasklist.removeAt(index);
-                            // });
-                          },
-                        ),
-                      ),
-                    ));
-              });
-            }
+                        ));
+                  });
+          }
         });
   }
 
