@@ -108,6 +108,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
     );
   }
 
+  String image = BackgroundPage().getBackgroundAssetName();
   Widget _mainContent(BuildContext context) {
     return Scaffold(
         //crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,22 +116,22 @@ class ShoppingList extends State<ShoppingListHomePage> {
       fit: StackFit.expand,
       children: <Widget>[
         new Image(
-          image: new AssetImage(BackgroundPage().getBackgroundAssetName()),
+          image: new AssetImage(image),
           fit: BoxFit.cover,
           color: Colors.black87,
           colorBlendMode: BlendMode.darken,
         ),
+        IconButton(
+          icon: Icon(Icons.arrow_back, size: 30),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Option()),
+            );
+          },
+        ),
         Column(children: <Widget>[
           SizedBox(height: 60),
-          IconButton(
-            icon: Icon(Icons.arrow_back, size: 30),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Option()),
-              );
-            },
-          ),
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Text(
@@ -138,7 +139,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
               style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.purpleAccent),
+                  color: Colors.purple),
             ),
           ),
           Padding(
@@ -188,7 +189,6 @@ class ShoppingList extends State<ShoppingListHomePage> {
                                 value: shoplist[index].done,
                                 onChanged: (checked) {
                                   setState(() {
-                                    //_incrementCounter();
                                     shoplist[index].done = checked;
                                   });
                                 }),
