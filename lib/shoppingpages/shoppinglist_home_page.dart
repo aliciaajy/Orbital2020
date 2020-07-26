@@ -51,15 +51,15 @@ class ShoppingList extends State<ShoppingListHomePage> {
     });
     return Scaffold(
       body: Stack(children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.arrow_back, size: 30),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Option()),
-            );
-          },
-        ),
+        // IconButton(
+        //   icon: Icon(Icons.arrow_back, size: 30),
+        //   onPressed: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => Option()),
+        //     );
+        //   },
+        // ),
         Container(
           height: 35,
           color: Colors.purple,
@@ -87,6 +87,8 @@ class ShoppingList extends State<ShoppingListHomePage> {
                             shoplist.add(ShopList(input ?? ''));
                           }
                         });
+                        //createShoppingItem();
+                        //shoplist.add(ShopList(input));
                         Navigator.pop(context);
                       },
                       child: Text("Add"),
@@ -102,15 +104,20 @@ class ShoppingList extends State<ShoppingListHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {},
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/kakao.jpg';
+                      _setBackground();
+                    });
+                  },
                 ),
                 IconButton(
-                    icon: Icon(Icons.people),
+                    icon: Icon(Icons.photo),
                     onPressed: () {
                       setState(() {
                         _selected = 'assets/motivational.jpg';
@@ -118,13 +125,58 @@ class ShoppingList extends State<ShoppingListHomePage> {
                       });
                     }),
                 IconButton(
-                    icon: Icon(Icons.crop_original),
+                    icon: Icon(Icons.photo),
                     onPressed: () {
                       setState(() {
-                        _selected = 'assets/nature.jpg';
+                        _selected = 'assets/bts.jpg';
                         _setBackground();
                       });
                     }),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/shop.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/menu.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/ad.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/plane.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/nature.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
               ])),
     );
   }
@@ -147,17 +199,17 @@ class ShoppingList extends State<ShoppingListHomePage> {
       fit: StackFit.expand,
       children: <Widget>[
         _setBackground(),
-        // IconButton(
-        //   icon: Icon(Icons.arrow_back, size: 30),
-        //   onPressed: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => Option()),
-        //     );
-        //   },
-        // ),
-        Column(children: <Widget>[
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           SizedBox(height: 60),
+          IconButton(
+            icon: Icon(Icons.arrow_back, size: 30),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Option()),
+              );
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Text(
@@ -165,7 +217,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
               style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.purple),
+                  color: Colors.purpleAccent),
             ),
           ),
           Padding(

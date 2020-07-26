@@ -46,6 +46,17 @@ class MyTaskHomePageState extends State<MyHomePage> {
     return _counter / tasklist.length;
   }
 
+  String _selected = '';
+
+  Image _setBackground() {
+    return new Image(
+      image: new AssetImage(_selected),
+      fit: BoxFit.cover,
+      color: Colors.black54,
+      colorBlendMode: BlendMode.darken,
+    );
+  }
+
   createTodos() {
     DocumentReference documentReference =
         Firestore.instance.collection("To-DoList - task").document(input);
@@ -165,7 +176,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
                       ]),
                   actions: <Widget>[
                     FlatButton(
-                       child: Text("Add"),
+                      child: Text("Add"),
                       onPressed: () {
                         setState(() {
                           if (currentPage == 0) {
@@ -178,7 +189,6 @@ class MyTaskHomePageState extends State<MyHomePage> {
                         });
                         Navigator.pop(context);
                       },
-                     
                     )
                   ],
                 );
@@ -195,49 +205,122 @@ class MyTaskHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {},
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/kakao.jpg';
+                      _setBackground();
+                    });
+                  },
                 ),
-                IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+                IconButton(
+                    icon: Icon(Icons.photo),
+                    onPressed: () {
+                      setState(() {
+                        _selected = 'assets/motivational.jpg';
+                        _setBackground();
+                      });
+                    }),
+                IconButton(
+                    icon: Icon(Icons.photo),
+                    onPressed: () {
+                      setState(() {
+                        _selected = 'assets/bts.jpg';
+                        _setBackground();
+                      });
+                    }),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/shop.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/menu.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/ad.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/plane.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/nature.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
               ])),
     );
   }
 
   Widget _mainContent(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 60),
-        IconButton(
-          icon: Icon(Icons.arrow_back, size: 30),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Option()),
-            );
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Text(
-            "To-Do List",
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+    return Scaffold(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        body: new Stack(fit: StackFit.expand, children: <Widget>[
+      _setBackground(),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(height: 60),
+          IconButton(
+            icon: Icon(Icons.arrow_back, size: 30),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Option()),
+              );
+            },
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: _button(context),
-        ),
-        Expanded(
-            child: PageView(
-          controller: _pageController,
-          children: <Widget>[
-            taskbodycontent(context),
-            eventbodycontent(context)
-          ],
-        ))
-      ],
-    );
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Text(
+              "To-Do List",
+              style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purpleAccent),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: _button(context),
+          ),
+          Expanded(
+              child: PageView(
+            controller: _pageController,
+            children: <Widget>[
+              taskbodycontent(context),
+              eventbodycontent(context)
+            ],
+          ))
+        ],
+      )
+    ]));
   }
 
   Widget _button(BuildContext context) {
@@ -279,7 +362,8 @@ class MyTaskHomePageState extends State<MyHomePage> {
   Widget taskbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection("To-DoList - task").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (snapshots.hasError) return Text('Error: ${snapshots.error}');
           switch (snapshots.connectionState) {
             case ConnectionState.waiting:

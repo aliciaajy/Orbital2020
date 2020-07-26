@@ -58,6 +58,7 @@ class CookingList extends State<CookingListHomePage> {
     });
   }
 
+  String _selected = '';
   @override
   Widget build(BuildContext context) {
     _pageController.addListener(() {
@@ -91,17 +92,15 @@ class CookingList extends State<CookingListHomePage> {
                             : "Enter steps"),
                     onChanged: (String value) {
                       input = currentPage == 0
-                          ? value
-                          : value;
+                          ? (ingredlist.length + 1).toString() + ". " + value
+                          : (recipelist.length + 1).toString() + ". " + value;
                     },
                   ),
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () {
                         setState(() {
-                          currentPage == 0 
-                          ? createItem() 
-                          : createRecipe();
+                          currentPage == 0 ? createItem() : createRecipe();
                           // ? ingredlist.add(IngredList(input))
                           // : recipelist.add(Recipe(input));
                           Navigator.pop(context);
@@ -124,11 +123,85 @@ class CookingList extends State<CookingListHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.settings),
-                  onPressed: () {},
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/kakao.jpg';
+                      _setBackground();
+                    });
+                  },
                 ),
-                IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+                IconButton(
+                    icon: Icon(Icons.photo),
+                    onPressed: () {
+                      setState(() {
+                        _selected = 'assets/motivational.jpg';
+                        _setBackground();
+                      });
+                    }),
+                IconButton(
+                    icon: Icon(Icons.photo),
+                    onPressed: () {
+                      setState(() {
+                        _selected = 'assets/bts.jpg';
+                        _setBackground();
+                      });
+                    }),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/shop.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/menu.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/ad.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/plane.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.photo),
+                  onPressed: () {
+                    setState(() {
+                      _selected = 'assets/nature.jpg';
+                      _setBackground();
+                    });
+                  },
+                ),
               ])),
+    );
+  }
+
+  Image _setBackground() {
+    return new Image(
+      image: new AssetImage(_selected),
+      fit: BoxFit.cover,
+      color: Colors.black54,
+      colorBlendMode: BlendMode.darken,
     );
   }
 
@@ -136,22 +209,7 @@ class CookingList extends State<CookingListHomePage> {
     return Scaffold(
         //crossAxisAlignment: CrossAxisAlignment.start,
         body: new Stack(fit: StackFit.expand, children: <Widget>[
-      // new Image(
-      //   image: background().image,
-      //   fit: BoxFit.cover,
-      //   color: Colors.black87,
-      //   colorBlendMode: BlendMode.darken,
-      // ),
-      // IconButton(
-      //   icon: Icon(Icons.arrow_back, size: 30),
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => Option()),
-      //     );
-      //   },
-      // ),
-
+      _setBackground(),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -169,7 +227,10 @@ class CookingList extends State<CookingListHomePage> {
             padding: const EdgeInsets.all(24.0),
             child: Text(
               "Cooking List",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purpleAccent),
             ),
           ),
           Padding(
@@ -227,7 +288,8 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget ingredbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("CookingList - ingred").snapshots(),
+        stream:
+            Firestore.instance.collection("CookingList - ingred").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (snapshots.hasError) return Text('Error: ${snapshots.error}');
@@ -276,7 +338,8 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget recipebodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("CookingList - recipe").snapshots(),
+        stream:
+            Firestore.instance.collection("CookingList - recipe").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (snapshots.hasError) return Text('Error: ${snapshots.error}');
