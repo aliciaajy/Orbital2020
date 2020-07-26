@@ -76,7 +76,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
                         setState(() {
                           if (currentPage == 0) {
                             createShoppingItem();
-                            return shoplist.add(ShopList(input ?? ''));
+                            shoplist.add(ShopList(input ?? ''));
                           }
                         });
                         //createShoppingItem();
@@ -108,7 +108,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
     );
   }
 
-  String image = BackgroundPage().getBackgroundAssetName();
+  
   Widget _mainContent(BuildContext context) {
     return Scaffold(
         //crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class ShoppingList extends State<ShoppingListHomePage> {
       fit: StackFit.expand,
       children: <Widget>[
         new Image(
-          image: new AssetImage(image),
+          image: BackgroundPage().image,
           fit: BoxFit.cover,
           color: Colors.black87,
           colorBlendMode: BlendMode.darken,

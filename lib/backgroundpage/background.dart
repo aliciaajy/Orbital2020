@@ -11,9 +11,16 @@ class BackgroundPage extends State<Background> {
   String _selected = 'None';
 
   String getBackgroundAssetName() {
-    print(_selected);
     return _selected;
   }
+
+  var assetImage1 = new AssetImage('assets/motivational.jpg');
+  var assetImage2 = new AssetImage('assets/nature.jpg');
+  var assetImage3 = new AssetImage('assets/kakao.jpg');
+
+  var image;
+
+  //String _selected = 'None';
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +77,7 @@ class BackgroundPage extends State<Background> {
                                 fontStyle: FontStyle.italic)),
                         onTap: () async {
                           setState(() {
-                            _selected = 'assets/motivational.jpg';
+                            image = new Image(image: assetImage1, height: 48.0, width: 48.0,);
                           });
                           Navigator.of(context).pop();
                         },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:login/widgets/custom_button.dart';
 import 'package:login/pages/type_of_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:login/backgroundpage/background.dart';
 
 class CookingListHomePage extends StatefulWidget {
   @override
@@ -19,9 +20,7 @@ class CookingList extends State<CookingListHomePage> {
   static List<Recipe> recipelist = new List<Recipe>();
 
   createItem() {
-   // DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(input);
-
-   DocumentReference documentReference = Firestore.instance.collection("users").document().collection("cooking").document(input);
+   DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(input);
 
     Map<String, String> items = {"itemTitle": input};
 
@@ -31,7 +30,7 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   createRecipe() {
-    DocumentReference documentReference = Firestore.instance.collection("users").document(EmailAuthProvider.providerId).collection("recipe").document(input);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - recipe").document(input);
 
     Map<String, String> recipes = {"recipeTitle": input};
 
@@ -41,7 +40,7 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   deleteItem(item) {
-    DocumentReference documentReference = Firestore.instance.collection("users").document(EmailAuthProvider.providerId).collection("cooking").document(input);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(input);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -49,7 +48,7 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   deleteRecipe(item) {
-    DocumentReference documentReference = Firestore.instance.collection("users").document(EmailAuthProvider.providerId).collection("recipe").document(input);
+    DocumentReference documentReference = Firestore.instance.collection("CookingList - recipe").document(input);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -131,7 +130,28 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   Widget _mainContent(BuildContext context) {
-    return Column(
+    return Scaffold(
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        body: new Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        new Image(
+          image: background().image,
+          fit: BoxFit.cover,
+          color: Colors.black87,
+          colorBlendMode: BlendMode.darken,
+        ),
+        IconButton(
+          icon: Icon(Icons.arrow_back, size: 30),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Option()),
+            );
+          },
+        ),
+    
+    Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(height: 60),
@@ -164,7 +184,7 @@ class CookingList extends State<CookingListHomePage> {
           ],
         ))
       ],
-    );
+    )]));
   }
 
   Widget _button(BuildContext context) {
@@ -205,7 +225,7 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget ingredbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("users").document(EmailAuthProvider.providerId).collection("cooking").snapshots(),
+      stream: Firestore.instance.collection("cooking").snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (snapshots.hasError)
           return Text('Error: ${snapshots.error}');
