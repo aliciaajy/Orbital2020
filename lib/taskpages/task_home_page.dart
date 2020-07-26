@@ -168,17 +168,17 @@ class MyTaskHomePageState extends State<MyHomePage> {
                        child: Text("Add"),
                       onPressed: () {
                         //async
-                  if(input.isNotEmpty){
-                      Firestore.instance
-                        .collection("users")
-                        .document(widget.uid)
-                        .collection('tasks')
-                        .add(input)
-                        .then((result) => {
-                              Navigator.pop(context),
-                            })
-                        .catchError((err) => print(err));
-                  }
+                  // if(input.isNotEmpty){
+                  //     Firestore.instance
+                  //       .collection("users")
+                  //       .document(widget.uid)
+                  //       .collection('tasks')
+                  //       .add(input)
+                  //       .then((result) => {
+                  //             Navigator.pop(context),
+                  //           })
+                  //       .catchError((err) => print(err));
+                  // }
 
                         //await Firestore.instance.collection("To-DoList - task").add({'name': controller.text, 'completed': false});
                         // setState(() {
@@ -298,7 +298,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
 
   Widget taskbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("users").document(widget.uid).collection('tasks').snapshots(),
+        stream: Firestore.instance.collection("users").snapshots(),
         //Firestore.instance.collection("To-DoList - task").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
