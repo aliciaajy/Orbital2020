@@ -287,7 +287,7 @@ class MyTaskHomePageState extends State<MyHomePage> {
             default:
               return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: tasklist.length,
+                  itemCount: snapshots.data.documents.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot documentSnapshot =
                         snapshots.data.documents[index];

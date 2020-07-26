@@ -85,10 +85,8 @@ class TravelList extends State<TravelListHomePage> {
                             currentPage == 0 ? 'Enter item' : "Enter location"),
                     onChanged: (String value) {
                       input = currentPage == 0
-                          ? (packinglist.length + 1).toString() + ". " + value
-                          : (itinerarylist.length + 1).toString() +
-                              ". " +
-                              value;
+                          ? value
+                          : value;
                     },
                   ),
                   actions: <Widget>[

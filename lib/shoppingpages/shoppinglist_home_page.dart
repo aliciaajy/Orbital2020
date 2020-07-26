@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:login/pages/type_of_list.dart';
 import 'package:login/widgets/custom_button.dart';
-import 'package:login/backgroundpage/background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShoppingListHomePage extends StatefulWidget {
@@ -88,8 +87,6 @@ class ShoppingList extends State<ShoppingListHomePage> {
                             shoplist.add(ShopList(input ?? ''));
                           }
                         });
-                        //createShoppingItem();
-                        //shoplist.add(ShopList(input));
                         Navigator.pop(context);
                       },
                       child: Text("Add"),

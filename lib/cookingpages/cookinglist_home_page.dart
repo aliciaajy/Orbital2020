@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/widgets/custom_button.dart';
 import 'package:login/pages/type_of_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:login/backgroundpage/background.dart';
 
 class CookingListHomePage extends StatefulWidget {
   @override
@@ -14,7 +13,7 @@ class CookingListHomePage extends StatefulWidget {
 class CookingList extends State<CookingListHomePage> {
   PageController _pageController = PageController();
   double currentPage = 0;
-  String input = "00";
+  String input = "";
 
   static List<IngredList> ingredlist = List<IngredList>();
   static List<Recipe> recipelist = new List<Recipe>();
@@ -92,15 +91,17 @@ class CookingList extends State<CookingListHomePage> {
                             : "Enter steps"),
                     onChanged: (String value) {
                       input = currentPage == 0
-                          ? (ingredlist.length + 1).toString() + ". " + value
-                          : (recipelist.length + 1).toString() + ". " + value;
+                          ? value
+                          : value;
                     },
                   ),
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () {
                         setState(() {
-                          currentPage == 0 ? createItem() : createRecipe();
+                          currentPage == 0 
+                          ? createItem() 
+                          : createRecipe();
                           // ? ingredlist.add(IngredList(input))
                           // : recipelist.add(Recipe(input));
                           Navigator.pop(context);
@@ -226,7 +227,7 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget ingredbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("cooking").snapshots(),
+        stream: Firestore.instance.collection("CookingList - ingred").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (snapshots.hasError) return Text('Error: ${snapshots.error}');
@@ -261,9 +262,9 @@ class CookingList extends State<CookingListHomePage> {
                               ),
                               onPressed: () {
                                 deleteItem(documentSnapshot["itemTitle"]);
-                                // setState(() {
-                                //   ingredlist.removeAt(index);
-                                // });
+                                setState(() {
+                                  ingredlist.removeAt(index);
+                                });
                               },
                             ),
                           ),
@@ -275,11 +276,7 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget recipebodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection("users")
-            .document(EmailAuthProvider.providerId)
-            .collection("recipe")
-            .snapshots(),
+        stream: Firestore.instance.collection("CookingList - recipe").snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (snapshots.hasError) return Text('Error: ${snapshots.error}');
