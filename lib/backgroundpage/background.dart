@@ -10,8 +10,8 @@ class Background extends StatefulWidget {
 class BackgroundPage extends State<Background> {
   String _selected = 'None';
 
-  String getBackgroundAssetName() {
-    return _selected;
+  AssetImage getBackgroundAssetName() {
+    return image;
   }
 
   var assetImage1 = new AssetImage('assets/motivational.jpg');
@@ -77,7 +77,7 @@ class BackgroundPage extends State<Background> {
                                 fontStyle: FontStyle.italic)),
                         onTap: () async {
                           setState(() {
-                            image = new Image(image: assetImage1, height: 48.0, width: 48.0,);
+                            image = assetImage1;
                           });
                           Navigator.of(context).pop();
                         },

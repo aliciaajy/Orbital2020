@@ -20,7 +20,8 @@ class CookingList extends State<CookingListHomePage> {
   static List<Recipe> recipelist = new List<Recipe>();
 
   createItem() {
-   DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("CookingList - ingred").document(input);
 
     Map<String, String> items = {"itemTitle": input};
 
@@ -30,7 +31,8 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   createRecipe() {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList - recipe").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("CookingList - recipe").document(input);
 
     Map<String, String> recipes = {"recipeTitle": input};
 
@@ -40,7 +42,8 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   deleteItem(item) {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList - ingred").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("CookingList - ingred").document(input);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -48,7 +51,8 @@ class CookingList extends State<CookingListHomePage> {
   }
 
   deleteRecipe(item) {
-    DocumentReference documentReference = Firestore.instance.collection("CookingList - recipe").document(input);
+    DocumentReference documentReference =
+        Firestore.instance.collection("CookingList - recipe").document(input);
 
     documentReference.delete().whenComplete(() {
       print("$item deleted");
@@ -96,11 +100,9 @@ class CookingList extends State<CookingListHomePage> {
                     FlatButton(
                       onPressed: () {
                         setState(() {
-                          currentPage == 0
-                          ? createItem()
-                          : createRecipe();
-                              // ? ingredlist.add(IngredList(input))
-                              // : recipelist.add(Recipe(input));
+                          currentPage == 0 ? createItem() : createRecipe();
+                          // ? ingredlist.add(IngredList(input))
+                          // : recipelist.add(Recipe(input));
                           Navigator.pop(context);
                         });
                       },
@@ -132,59 +134,58 @@ class CookingList extends State<CookingListHomePage> {
   Widget _mainContent(BuildContext context) {
     return Scaffold(
         //crossAxisAlignment: CrossAxisAlignment.start,
-        body: new Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        new Image(
-          image: background().image,
-          fit: BoxFit.cover,
-          color: Colors.black87,
-          colorBlendMode: BlendMode.darken,
-        ),
-        IconButton(
-          icon: Icon(Icons.arrow_back, size: 30),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Option()),
-            );
-          },
-        ),
-    
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 60),
-        IconButton(
-          icon: Icon(Icons.arrow_back, size: 30),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Option()),
-            );
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Text(
-            "Cooking List",
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        body: new Stack(fit: StackFit.expand, children: <Widget>[
+      // new Image(
+      //   image: background().image,
+      //   fit: BoxFit.cover,
+      //   color: Colors.black87,
+      //   colorBlendMode: BlendMode.darken,
+      // ),
+      // IconButton(
+      //   icon: Icon(Icons.arrow_back, size: 30),
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => Option()),
+      //     );
+      //   },
+      // ),
+
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(height: 60),
+          IconButton(
+            icon: Icon(Icons.arrow_back, size: 30),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Option()),
+              );
+            },
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: _button(context),
-        ),
-        Expanded(
-            child: PageView(
-          controller: _pageController,
-          children: <Widget>[
-            ingredbodycontent(context),
-            recipebodycontent(context)
-          ],
-        ))
-      ],
-    )]));
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Text(
+              "Cooking List",
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: _button(context),
+          ),
+          Expanded(
+              child: PageView(
+            controller: _pageController,
+            children: <Widget>[
+              ingredbodycontent(context),
+              recipebodycontent(context)
+            ],
+          ))
+        ],
+      )
+    ]));
   }
 
   Widget _button(BuildContext context) {
@@ -225,94 +226,104 @@ class CookingList extends State<CookingListHomePage> {
 
   Widget ingredbodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("cooking").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (snapshots.hasError)
-          return Text('Error: ${snapshots.error}');
+        stream: Firestore.instance.collection("cooking").snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          if (snapshots.hasError) return Text('Error: ${snapshots.error}');
           switch (snapshots.connectionState) {
-            case ConnectionState.waiting: return Text('Loading...');
-            default: 
-
-        return ListView.builder(
-          shrinkWrap: true,
-        itemCount: snapshots.data.documents.length,
-        itemBuilder: (context, index) {
-          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
-          return Dismissible(
-            onDismissed: (direction) {
-              deleteItem(documentSnapshot["itemTitle"]);
-            },
-              key: Key(documentSnapshot["itemTitle"]), //Key(shoplist[index]),
-              child: Card(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: ListTile(
-                  leading: Icon(Icons.check, color: Colors.purpleAccent),
-                  title: Text(documentSnapshot["itemTitle"]),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.purple,
-                    ),
-                    onPressed: () {
-                      deleteItem(documentSnapshot["itemTitle"]);
-                      // setState(() {
-                      //   ingredlist.removeAt(index);
-                      // });
-                    },
-                  ),
-                ),
-              ));
-        });
+            case ConnectionState.waiting:
+              return Text('Loading...');
+            default:
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshots.data.documents.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot documentSnapshot =
+                        snapshots.data.documents[index];
+                    return Dismissible(
+                        onDismissed: (direction) {
+                          deleteItem(documentSnapshot["itemTitle"]);
+                        },
+                        key: Key(documentSnapshot[
+                            "itemTitle"]), //Key(shoplist[index]),
+                        child: Card(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: ListTile(
+                            leading:
+                                Icon(Icons.check, color: Colors.purpleAccent),
+                            title: Text(documentSnapshot["itemTitle"]),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.purple,
+                              ),
+                              onPressed: () {
+                                deleteItem(documentSnapshot["itemTitle"]);
+                                // setState(() {
+                                //   ingredlist.removeAt(index);
+                                // });
+                              },
+                            ),
+                          ),
+                        ));
+                  });
           }
-      });
+        });
   }
 
   Widget recipebodycontent(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection("users").document(EmailAuthProvider.providerId).collection("recipe").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (snapshots.hasError)
-          return Text('Error: ${snapshots.error}');
+        stream: Firestore.instance
+            .collection("users")
+            .document(EmailAuthProvider.providerId)
+            .collection("recipe")
+            .snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          if (snapshots.hasError) return Text('Error: ${snapshots.error}');
           switch (snapshots.connectionState) {
-            case ConnectionState.waiting: return Text('Loading...');
-            default: 
-
-        return ListView.builder(
-          shrinkWrap: true,
-        itemCount: snapshots.data.documents.length,
-        itemBuilder: (context, index) {
-          DocumentSnapshot documentSnapshot = snapshots.data.documents[index];
-          return Dismissible(
-            onDismissed: (direction) {
-              deleteRecipe(documentSnapshot["recipeTitle"]);
-            },
-              key: Key(documentSnapshot["recipeTitle"]), //Key(shoplist[index]),
-              child: Card(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: ListTile(
-                  leading: Icon(Icons.local_dining, color: Colors.purpleAccent),
-                  title: Text(documentSnapshot["recipeTitle"]),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.purple,
-                    ),
-                    onPressed: () {
-                      deleteRecipe(documentSnapshot["recipeTitle"]);
-                      // setState(() {
-                      //   recipelist.removeAt(index);
-                      // });
-                    },
-                  ),
-                ),
-              ));
-        });
+            case ConnectionState.waiting:
+              return Text('Loading...');
+            default:
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshots.data.documents.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot documentSnapshot =
+                        snapshots.data.documents[index];
+                    return Dismissible(
+                        onDismissed: (direction) {
+                          deleteRecipe(documentSnapshot["recipeTitle"]);
+                        },
+                        key: Key(documentSnapshot[
+                            "recipeTitle"]), //Key(shoplist[index]),
+                        child: Card(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: ListTile(
+                            leading: Icon(Icons.local_dining,
+                                color: Colors.purpleAccent),
+                            title: Text(documentSnapshot["recipeTitle"]),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.purple,
+                              ),
+                              onPressed: () {
+                                deleteRecipe(documentSnapshot["recipeTitle"]);
+                                // setState(() {
+                                //   recipelist.removeAt(index);
+                                // });
+                              },
+                            ),
+                          ),
+                        ));
+                  });
           }
-      });
+        });
   }
 }
 

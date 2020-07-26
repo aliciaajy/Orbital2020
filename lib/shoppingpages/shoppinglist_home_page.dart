@@ -52,6 +52,15 @@ class ShoppingList extends State<ShoppingListHomePage> {
     });
     return Scaffold(
       body: Stack(children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.arrow_back, size: 30),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Option()),
+            );
+          },
+        ),
         Container(
           height: 35,
           color: Colors.purple,
@@ -96,40 +105,60 @@ class ShoppingList extends State<ShoppingListHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () {},
                 ),
-                IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+                IconButton(
+                    icon: Icon(Icons.people),
+                    onPressed: () {
+                      setState(() {
+                        _selected = 'assets/motivational.jpg';
+                        _setBackground();
+                      });
+                    }),
+                IconButton(
+                    icon: Icon(Icons.crop_original),
+                    onPressed: () {
+                      setState(() {
+                        _selected = 'assets/nature.jpg';
+                        _setBackground();
+                      });
+                    }),
               ])),
     );
   }
 
-  
+  String _selected = "";
+
+  Image _setBackground() {
+    return new Image(
+      image: new AssetImage(_selected),
+      fit: BoxFit.cover,
+      color: Colors.black54,
+      colorBlendMode: BlendMode.darken,
+    );
+  }
+
   Widget _mainContent(BuildContext context) {
     return Scaffold(
         //crossAxisAlignment: CrossAxisAlignment.start,
         body: new Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        new Image(
-          image: BackgroundPage().image,
-          fit: BoxFit.cover,
-          color: Colors.black87,
-          colorBlendMode: BlendMode.darken,
-        ),
-        IconButton(
-          icon: Icon(Icons.arrow_back, size: 30),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Option()),
-            );
-          },
-        ),
+        _setBackground(),
+        // IconButton(
+        //   icon: Icon(Icons.arrow_back, size: 30),
+        //   onPressed: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => Option()),
+        //     );
+        //   },
+        // ),
         Column(children: <Widget>[
           SizedBox(height: 60),
           Padding(
