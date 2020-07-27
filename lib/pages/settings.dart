@@ -35,18 +35,18 @@ class Settings extends StatelessWidget {
             subtitle: new Text('Change password'),
             trailing: new Icon(Icons.lock_outline),
           ),
-          new ListTile(
-            title: new Text('Background Design'),
-            isThreeLine: true,
-            subtitle: new Text('Edit background image'),
-            trailing: new Icon(
-              Icons.format_color_fill,
-            ),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Background()));
-            },
-          ),
+          // new ListTile(
+          //   title: new Text('Background Design'),
+          //   isThreeLine: true,
+          //   subtitle: new Text('Edit background image'),
+          //   trailing: new Icon(
+          //     Icons.format_color_fill,
+          //   ),
+          //   onTap: () {
+          //     Navigator.push(context,
+          //         MaterialPageRoute(builder: (context) => Background()));
+          //   },
+          // ),
           new ListTile(
               title: new Text('Progress'),
               isThreeLine: true,

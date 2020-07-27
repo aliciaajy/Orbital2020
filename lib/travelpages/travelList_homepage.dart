@@ -99,11 +99,7 @@ class TravelList extends State<TravelListHomePage> {
                         hintText:
                             currentPage == 0 ? 'Enter item' : "Enter location"),
                     onChanged: (String value) {
-                      input = currentPage == 0
-                          ? (packinglist.length + 1).toString() + ". " + value
-                          : (itinerarylist.length + 1).toString() +
-                              ". " +
-                              value;
+                      input = value;
                     },
                   ),
                   actions: <Widget>[
@@ -325,8 +321,11 @@ class TravelList extends State<TravelListHomePage> {
                                 color: Colors.purple,
                               ),
                               onPressed: () {
-                                deletePackinglist(
-                                    documentSnapshot["packingListTitle"]);
+                                setState(() {
+                                  deletePackinglist(
+                                      documentSnapshot["packingListTitle"]);
+                                });
+
                                 // setState(() {
                                 //   packinglist.removeAt(index);
                                 // });

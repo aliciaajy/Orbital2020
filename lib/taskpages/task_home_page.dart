@@ -402,10 +402,10 @@ class MyTaskHomePageState extends State<MyHomePage> {
                                 color: Colors.purple,
                               ),
                               onPressed: () {
-                                // setState(() {
-                                deleteTodos(documentSnapshot["taskTitle"]);
-                                // tasklist.removeAt(index);
-                                // });
+                                setState(() {
+                                  deleteTodos(documentSnapshot["taskTitle"]);
+                                  //tasklist.removeAt(index);
+                                });
                               },
                             ),
                           ),

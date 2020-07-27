@@ -284,8 +284,12 @@ class ShoppingList extends State<ShoppingListHomePage> {
                                 color: Colors.purple,
                               ),
                               onPressed: () {
-                                deleteShoppingItem(
-                                    documentSnapshot["itemTitle"]);
+                                setState(() {
+                                  deleteShoppingItem(
+                                      documentSnapshot["itemTitle"]);
+                                  //shoplist.removeAt(index);
+                                });
+
                                 // setState(() {
                                 //   //shoplist.removeAt(index);
                                 //   deleteShoppingItem(documentSnapshot["itemTitle"]);

@@ -91,9 +91,7 @@ class CookingList extends State<CookingListHomePage> {
                             ? 'Enter ingredient'
                             : "Enter steps"),
                     onChanged: (String value) {
-                      input = currentPage == 0
-                          ? (ingredlist.length + 1).toString() + ". " + value
-                          : (recipelist.length + 1).toString() + ". " + value;
+                      input = value;
                     },
                   ),
                   actions: <Widget>[
@@ -323,9 +321,9 @@ class CookingList extends State<CookingListHomePage> {
                                 color: Colors.purple,
                               ),
                               onPressed: () {
-                                deleteItem(documentSnapshot["itemTitle"]);
                                 setState(() {
-                                  ingredlist.removeAt(index);
+                                  deleteItem(documentSnapshot["itemTitle"]);
+                                  //ingredlist.removeAt(index);
                                 });
                               },
                             ),
